@@ -23,6 +23,11 @@ void pause(int ms)
     Sleep(ms);
 }
 
+void cls()
+{
+    system("cls");
+    return;
+}
 
 void draw(short x, short y, int color, std::string outing)
 {
@@ -78,7 +83,7 @@ short choosing(std::vector<short> Y, short x, int color, std::string base)
     while (true)
     {
         draw(x,Y[pointing_to], YELLOW, base);
-        char c = _getch();
+        char c = normalized_getch();
         draw(x,Y[pointing_to], YELLOW, " ");
         switch (c)
         {
@@ -95,12 +100,36 @@ short choosing(std::vector<short> Y, short x, int color, std::string base)
     }
 }
 
+void toggle(bool *variable)
+{
+    if (*variable)
+    {
+        (*variable) = false;
+    }
+    else
+    {
+        (*variable) = true;
+    }
+}
+
+void toggle(int *variable, int min_val, int max_val)
+{
+    if ((*variable) == max_val)
+    {
+        (*variable) = min_val;
+    }
+    else
+    {
+        (*variable)++;
+    }
+}
+
 
 void _debugCharacterCast()
 {
     setColor(GRAY);
     gotoXY(0,0);
-    system("cls");
+    cls();
 
     // Drawing symbols
     for(int i=176; i<=287; i++)

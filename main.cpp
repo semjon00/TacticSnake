@@ -1,40 +1,3 @@
-/// TODO: ///
-
-/// Nessesery
-// Destructors
-// No-mess observers
-// Settings share
-
-// Spectator mode
-// Logo
-// Surprices
-// Bonus indicators
-
-/// Gameplay
-// Corpse mode
-// N in M out rule (shorten from back)
-// No-straight mode (no more 3 straight turns)
-// Obstacles
-
-/// Coding
-// Merge board and lobby (new game class?)
-// Initializators rewrite
-// snake_color
-
-/// Box
-// Smart congratulations
-// Net time out
-// I am always green net coloring mode
-// Choosed options highlighting
-// Recording and replaying match (with net?)
-// Bigger display
-// Snake skin
-// Notifications
-// Line of events
-// Faster graphics
-// Cpu-controll-mode
-// 3D field
-
 #include "engine.h"
 #include "snake.h"
 #include "net.h"
@@ -42,37 +5,47 @@
 
 int main()
 {
-    //_debugCharacterCast();
-
     Lobby lobby;
     Net net;
 
     while (true)
     {
         lobby.mainScreen();
-        if (!lobby.isRunning)
+        if (!lobby.is_running)
         {
             // Handeling exit from the game
             return 0;
         }
 
+        // Syncing settings
+        if (lobby.net_usage)
+        {
+            if (net.synchSettings(&lobby))
+            {
+                // Gatting out from game
+                continue;
+            }
+        }
+
+
         // Drawing field
-        system("cls");
-        drawFrame(2,2,3*8,3*7,GRAY,'#');
-        draw(2,3+3*7+2,GRAY,"Current player: ");
+        cls();
+        drawFrame(2, 2, 3*(lobby.field_width), 3*(lobby.field_height), GRAY, '#');
+        draw(2, 3+3*(lobby.field_height)+2, GRAY, "Current player: ");
 
         // Creating field
-        std::vector<std::vector<short>> board (8, std::vector<short> (7, -1));
+        std::vector<std::vector<short>> board
+            (lobby.field_width, std::vector<short> (lobby.field_height, -1));
 
         // Creating snakes
         std::vector<Snake> snakes;
 
-        bool net_local_ocupied = false;
-        for(int i = 0; i<lobby.snakes_total; i++)
+        if (lobby.net_usage)
         {
-            if (lobby.net_usage)
+            bool net_local_ocupied = false;
+            for(int i = 0; i<lobby.snakes_total; i++)
             {
-                if (net.wasUpdated(i, 0)||net_local_ocupied)
+                if (net.wasUpdated(i, 0) || net_local_ocupied)
                 {
                     snakes.push_back(Snake(i, &board, &lobby, &net, NET));
                 }
@@ -82,15 +55,23 @@ int main()
                     net_local_ocupied = true;
                 }
             }
-            else
+            if (net_local_ocupied == false)
+            {
+                // I am observer
+            }
+        }
+        else
+        {
+            for(int i = 0; i<lobby.snakes_total; i++)
             {
                 snakes.push_back(Snake(i, &board, &lobby, &net, PLAYER));
             }
         }
+
         lobby.snakes_in_game = lobby.snakes_total;
 
         // Making snakes move
-        while (lobby.isInGame)
+        while (lobby.is_in_game)
         {
             for(unsigned int i=0; i<snakes.size(); ++i)
             {
@@ -100,7 +81,7 @@ int main()
                 if (lobby.snakes_in_game<=1)
                 {
                     // Game won
-                    lobby.isInGame=0;
+                    lobby.is_in_game=0;
 
                     // Finding snake and make it celebrate
                     for(int i=0; i<lobby.snakes_total; i++)
@@ -125,6 +106,7 @@ int main()
                 }
             }
         }
-        system("cls");
+        cls();
     }
+    net.~Net();
 }

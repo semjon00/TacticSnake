@@ -19,7 +19,6 @@ enum Parts
 };
 
 
-
 class Snake
 {
 public:
@@ -27,7 +26,6 @@ public:
           std::vector<std::vector<short>>* _board,
           Lobby* _lobby,
           Net* _net, ControlModes _control_mode);
-    //~Snake();
 
     short getHeadX();
     short getHeadY();
@@ -38,7 +36,7 @@ public:
 
     void drawPart(short x, short y, int part);
 
-    bool isAvaibleCells();
+    bool cellsAvaible();
     void lose();
     void win();
 
@@ -46,15 +44,6 @@ public:
     bool isDead = false;
     short moves_done = 0;
 private:
-    const char* debris[6][3] = {
-    {"   ", "   ", "   "}, // Empty
-    {"   ", "   ", "   "}, // Regular
-    {"* *", "   ", "___"}, // Head
-    {"x x", "   ", "___"}, // Corpse head
-    {"o^o", "   ", "__j"}, // Watson head
-    {"^ ^", "   ", "C_J"}, // Win head
-    };
-
     std::vector<std::pair<short,short>> visited_cords;
 
     // Long jump and diagonal
@@ -70,6 +59,18 @@ private:
 
     // Link to the net object
     Net* net;
+
+protected:
+    const char* debris[8][3] = {
+    {"   ", "   ", "   "}, // Empty
+    {"   ", "   ", "   "}, // Regular
+    {"* *", "   ", "___"}, // Head
+    {"x x", "   ", "___"}, // Corpse head
+    {"o^o", "   ", "__j"}, // Watson head
+    {"^ ^", "   ", "c_j"}, // Win head
+    {"T T", "   ", " _ "}, // Cry emoji head
+    {"o -", "   ", " -<"}, // Kiss emoji head
+    };
 };
 
 #endif // SNAKE_H

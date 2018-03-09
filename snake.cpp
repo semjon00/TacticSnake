@@ -17,13 +17,13 @@ Snake::Snake(short _player_number, std::vector<std::vector<short>>* _board, Lobb
 
     while (lobby->net_usage && (!net->wasUpdated(player_number, -1)))
     {
-        /// Should be configurable
-        Sleep(500);
+        Sleep(net->net_synch_delay);
     }
 
     drawPart(getHeadX(), getHeadY(), 2);
     (*board)[lobby->spawn_coords[player_number*2]][lobby->spawn_coords[player_number*2+1]] = player_number;
 }
+
 
 short Snake::getHeadX()
 {
@@ -34,13 +34,31 @@ short Snake::getHeadY()
     return visited_cords.back().second;
 }
 
+int Snake::safeBoard(short x, short y)
+{
+    if (!(x<0 || x>=lobby->field_width || y<0 || y>=lobby->field_height))
+    {
+        return (*board)[x][y];
+    }
+    else
+    {
+        if (lobby->portal_walls)
+        {
+            return (*board)[x+lobby->field_width][y+lobby->field_height];
+        }
+        else
+            return -2;
+    }
+}
+
+
 void Snake::makeMove()
 {
     if (isDead)
     {
         return;
     }
-    if (!isAvaibleCells())
+    if (!cellsAvaible())
     {
         lose();
         return;
@@ -110,8 +128,7 @@ void Snake::makeMove()
         // Waiting for move
         while (!net->wasUpdated(player_number, visited_cords.size()))
         {
-            // Should be configurable
-            Sleep(500);
+            Sleep(net->net_synch_delay);
         }
 
         // Making move and catching cheaters on invalid moves
@@ -130,8 +147,11 @@ bool Snake::moveIfPossible(short deltaX, short deltaY)
     bool bonuses_to_take[2] = {false, false};
 
     // Getting boundary safe at first
-    if (safeBoard(getHeadX()+deltaX, getHeadY()+deltaY) == -2)
-        return false;
+    if (!lobby->portal_walls)
+    {
+        if (safeBoard(getHeadX()+deltaX, getHeadY()+deltaY) == -2)
+            return false;
+    }
 
     // Checking for allowance
     if ((*board)[deltaX+getHeadX()][deltaY+getHeadY()] != -1)
@@ -187,7 +207,38 @@ bool Snake::moveIfPossible(short deltaX, short deltaY)
     return true;
 }
 
-bool Snake::isAvaibleCells()
+
+void Snake::drawPart(short x, short y, int part)
+{
+    int color;
+    switch (part)
+    {
+    case EMPTY:
+        color = BLACK;
+        break;
+    case REGULAR:
+        color = (2*player_number+2)*(16+1);
+        break;
+    case HEAD:
+        color = (2*player_number+2)*(16+1)-1;
+        break;
+    case CORPSE_HEAD:
+        color = (2*player_number+2)*(16+1)-1;
+        break;
+    case WATSON_HEAD:
+        color = (2*player_number+2)*(16+1)-1;
+        break;
+    case WIN_HEAD:
+        color = (2*player_number+2)*(16+1)-1;
+        break;
+    }
+
+    for(short i=0; i<3; i++)
+        draw(x*3+3, y*3+3+i, color, debris[part][i]);
+}
+
+
+bool Snake::cellsAvaible()
 {
     bool is_space_avaible = false;
 
@@ -222,54 +273,6 @@ bool Snake::isAvaibleCells()
     return is_space_avaible;
 }
 
-void Snake::drawPart(short x, short y, int part)
-{
-    const char* debris[][3] = {
-    {"   ", "   ", "   "}, // Empty
-    {"   ", "   ", "   "}, // Regular
-    {"* *", "   ", "___"}, // Head
-    {"x x", "   ", "___"}, // Corpse head
-    {"o^o", "   ", "__j"}, // Watson head
-    {"^ ^", "   ", "C_J"}, // Win head
-    };
-
-    int color;
-    switch (part)
-    {
-    case EMPTY:
-        color = BLACK;
-        break;
-    case REGULAR:
-        color = (2*player_number+2)*(16+1);
-        break;
-    case HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case CORPSE_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case WATSON_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case WIN_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    }
-
-    for(short i=0; i<3; i++)
-        draw(x*3+3, y*3+3+i, color, debris[part][i]);
-}
-
-int Snake::safeBoard(short x, short y)
-{
-    if (!(x<0 || x>=8 || y<0 || y>=7))
-    {
-        return (*board)[x][y];
-    }
-    else
-        return -2;
-}
-
 void Snake::lose()
 {
     // Actions on death
@@ -284,7 +287,9 @@ void Snake::lose()
     if (!lobby->corpseMode)
     {
         // No-corpse mode animation and effects
-        Sleep(500);
+        Sleep(250);
+        drawPart(getHeadX(), getHeadY(), CORPSE_HEAD);
+        Sleep(250);
         for(unsigned int i=0; i<visited_cords.size(); i++)
         {
             drawPart(visited_cords[i].first, visited_cords[i].second, EMPTY);
@@ -307,15 +312,4 @@ void Snake::win()
     drawPart(getHeadX(), getHeadY(), WIN_HEAD);
 }
 
-/// CAUSES PROBLEMS
-//Snake::~Snake()
-//{
-//    // Makes qutters disconnect
-//    if (lobby->net_usage == true && lobby->isInGame == true && control_mode == PLAYER)
-//    {
-//        // Creating nonsence recording, which will result actual kicking
-//        visited_cords.push_back({1<<8, 1<<8});
-//        net->writeState(player_number, &visited_cords);
-//        // Sending cheat message to force-quit
-//    }
-//}
+

@@ -20,11 +20,14 @@ void gotoXY(short x, short y);
 void setColor(int c);
 void pause(int ms);
 
+void cls();
 void draw(short x, short y, int color, std::string outing);
 void drawFrame(short x, short y, short dx, short dy, int color, char base);
 void playerBarUpdate(short length, short player_number, bool meIndicator);
 
 short choosing(std::vector<short> Y, short x, int color, std::string base);
+void toggle(bool* variable);
+void toggle(int *variable, int min_val, int max_val);
 
 void _debugCharacterCast();
 void disableBlinking();
