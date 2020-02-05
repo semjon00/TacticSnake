@@ -25,8 +25,8 @@ private:
     std::ifstream input;
     std::ofstream output;
 
-    std::string getFileName(int player_number);
-    std::string getFileName(std::string str);
+    static std::string getFileName(int player_number);
+    static std::string getFileName(const std::string& str);
 };
 
 #endif // NET_H

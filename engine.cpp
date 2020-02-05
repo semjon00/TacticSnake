@@ -26,10 +26,9 @@ void pause(int ms)
 void cls()
 {
     system("cls");
-    return;
 }
 
-void draw(short x, short y, int color, std::string outing)
+void draw(short x, short y, int color, const std::string& outing)
 {
     gotoXY(x, y);
     setColor(color);
@@ -76,7 +75,7 @@ void playerBarUpdate(short length, short player_number, bool meIndicator)
 }
 
 
-short choosing(std::vector<short> Y, short x, int color, std::string base)
+short choosing(std::vector<short> Y, short x, int color, const std::string& base)
 {
     int pointing_to=0;
 
@@ -97,18 +96,6 @@ short choosing(std::vector<short> Y, short x, int color, std::string base)
             return pointing_to;
             break;
         }
-    }
-}
-
-void toggle(bool *variable)
-{
-    if (*variable)
-    {
-        (*variable) = false;
-    }
-    else
-    {
-        (*variable) = true;
     }
 }
 

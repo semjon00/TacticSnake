@@ -55,7 +55,7 @@ int main()
                     net_local_ocupied = true;
                 }
             }
-            if (net_local_ocupied == false)
+            if (!net_local_ocupied)
             {
                 // I am observer
             }
@@ -81,14 +81,14 @@ int main()
                 if (lobby.snakes_in_game<=1)
                 {
                     // Game won
-                    lobby.is_in_game=0;
+                    lobby.is_in_game=false;
 
                     // Finding snake and make it celebrate
-                    for(int i=0; i<lobby.snakes_total; i++)
+                    for(int u=0; u<lobby.snakes_total; u++)
                     {
-                        if (snakes[i].isDead == false)
+                        if (!snakes[u].isDead)
                         {
-                            snakes[i].win();
+                            snakes[u].win();
                             break;
                         }
                     }
@@ -97,9 +97,9 @@ int main()
                     // Clearing files
                     if (lobby.net_usage)
                     {
-                        for (int i=0; i<lobby.snakes_total; i++)
+                        for (int u=0; u<lobby.snakes_total; u++)
                         {
-                            net.voidState(i);
+                            net.voidState(u);
                         }
                     }
                     break;
@@ -108,5 +108,4 @@ int main()
         }
         cls();
     }
-    net.~Net();
 }

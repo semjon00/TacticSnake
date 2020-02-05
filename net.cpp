@@ -65,7 +65,7 @@ bool Net::synchSettings(Lobby* obj)
         // Checking for version compability
         int build_number = 0;
         input >> build_number;
-        if (AutoVersion::BUILD != build_number)
+        if (Version::BUILD != build_number)
         {
             input.close();
             obj->wrongBuildScreen(build_number);
@@ -86,7 +86,7 @@ bool Net::synchSettings(Lobby* obj)
     {
         // Write settings
         output.open(filename);
-        output << AutoVersion::BUILD << ' ';
+        output << Version::BUILD << ' ';
         output << (obj->snakes_total) << ' '\
                << (obj->corpseMode) << ' '\
                << (obj->obstalce_mode) << ' '\
@@ -103,7 +103,7 @@ std::string Net::getFileName(int player_number)
     return "ts" + std::to_string(player_number) + ".dat.txt";
 }
 
-std::string Net::getFileName(std::string str)
+std::string Net::getFileName(const std::string& str)
 {
     return "ts" + str + ".dat.txt";
 }

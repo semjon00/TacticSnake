@@ -18,7 +18,7 @@ public:
 
     void mainScreen();
     void settingsScreen();
-    void wrongBuildScreen(int build_number);
+    static void wrongBuildScreen(int build_number);
 
     bool is_in_game = false;
     bool is_running = true;

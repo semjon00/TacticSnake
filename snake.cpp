@@ -8,9 +8,9 @@ Snake::Snake(short _player_number, std::vector<std::vector<short>>* _board, Lobb
     lobby = _lobby;
     net = _net;
 
-    visited_cords.push_back({lobby->spawn_coords[player_number*2],lobby->spawn_coords[player_number*2+1]});
+    visited_cords.emplace_back(lobby->spawn_coords[player_number*2],lobby->spawn_coords[player_number*2+1]);
 
-    if ((lobby->net_usage == true) && control_mode==PLAYER)
+    if (lobby->net_usage && control_mode == PLAYER)
     {
         net->writeState(player_number, &visited_cords);
     }
@@ -79,13 +79,13 @@ void Snake::makeMove()
                 if (c=='q')
                 {
                     short mod=1;
-                    for (int i=0; i<2; i++)
+                    for (bool i : bonus_avaible)
                     {
-                        if (bonus_avaible[i])
+                        if (i)
                             mod++;
                     }
                     steps%=mod;
-                    steps=steps+1;
+                    steps++;
                 }
 
                 playerBarUpdate(steps, player_number, lobby->net_usage);
@@ -139,7 +139,6 @@ void Snake::makeMove()
         }
         break;
     }
-    return;
 }
 
 bool Snake::moveIfPossible(short deltaX, short deltaY)
@@ -159,10 +158,6 @@ bool Snake::moveIfPossible(short deltaX, short deltaY)
 
     // Checking for too long jumps
     if ((deltaX+3)%3+(deltaY+3)%3==0)
-        return false;
-
-    // Anti-cheat
-    if (abs(deltaX)+abs(deltaY)>3)
         return false;
 
     // Long jump handeling
@@ -196,10 +191,10 @@ bool Snake::moveIfPossible(short deltaX, short deltaY)
     // Updating cell and visited_cords
     (*board)[deltaX+getHeadX()][deltaY+getHeadY()] = player_number;
 
-    visited_cords.push_back(std::make_pair(getHeadX()+deltaX, getHeadY()+deltaY));
+    visited_cords.emplace_back(getHeadX()+deltaX, getHeadY()+deltaY);
 
     // Updating net if nessesery
-    if (lobby->net_usage == true && control_mode == PLAYER)
+    if (lobby->net_usage && control_mode == PLAYER)
     {
         net->writeState(player_number, &visited_cords);
     }
@@ -213,9 +208,6 @@ void Snake::drawPart(short x, short y, int part)
     int color;
     switch (part)
     {
-    case EMPTY:
-        color = BLACK;
-        break;
     case REGULAR:
         color = (2*player_number+2)*(16+1);
         break;
@@ -230,6 +222,9 @@ void Snake::drawPart(short x, short y, int part)
         break;
     case WIN_HEAD:
         color = (2*player_number+2)*(16+1)-1;
+        break;
+    default:
+        color = BLACK;
         break;
     }
 
@@ -280,9 +275,8 @@ void Snake::lose()
     lobby->snakes_in_game -= 1;
 
     // Visual effect
-    setColor(player_number*2+2);
-    gotoXY(2,3+3*7+3);
-    std::cout << "Game Over for player #" << player_number+1<<"!";
+    draw(2, 3+3*7+3, player_number*2+2,
+            "Game Over for player #" + std::to_string(player_number+1) + "!");
 
     if (!lobby->corpseMode)
     {
@@ -290,10 +284,10 @@ void Snake::lose()
         Sleep(250);
         drawPart(getHeadX(), getHeadY(), CORPSE_HEAD);
         Sleep(250);
-        for(unsigned int i=0; i<visited_cords.size(); i++)
+        for(auto & visited_cord : visited_cords)
         {
-            drawPart(visited_cords[i].first, visited_cords[i].second, EMPTY);
-            (*board)[visited_cords[i].first][visited_cords[i].second] = -1;
+            drawPart(visited_cord.first, visited_cord.second, EMPTY);
+            (*board)[visited_cord.first][visited_cord.second] = -1;
             Sleep(100);
         }
     }
@@ -303,7 +297,6 @@ void Snake::lose()
         Sleep(250);
         drawPart(getHeadX(), getHeadY(), CORPSE_HEAD);
     }
-
 }
 
 void Snake::win()
@@ -311,5 +304,3 @@ void Snake::win()
     draw(2, 3+3*7+3, player_number*2+2, "Congratulations!         ");
     drawPart(getHeadX(), getHeadY(), WIN_HEAD);
 }
-
-
