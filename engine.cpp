@@ -1,5 +1,8 @@
 #include "engine.h"
 
+#include <windows.h>
+#include <stdio.h>
+
 COORD coord;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -59,7 +62,7 @@ void playerBarUpdate(short length, short player_number, bool meIndicator)
     // Me indicator
     setColor(DARKGRAY);
     gotoXY(18,3+3*7+2);
-        std::cout << (meIndicator ? static_cast<char>(257) : ' ');
+    std::cout << (meIndicator ? u8"\u2666" : u8" ");
 
     // Actual bar
     setColor((player_number+1)*34);
@@ -149,7 +152,6 @@ void disableBlinking()
     CursoInfo.bVisible = false;
     SetConsoleCursorInfo(hConsole, &CursoInfo);
 }
-
 
 void flushGetch()
 {

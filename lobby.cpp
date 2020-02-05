@@ -20,6 +20,7 @@ Lobby::Lobby()
         system("title tic tac Snake!");
 
     disableBlinking();
+    SetConsoleOutputCP(65001);
 }
 
 void Lobby::mainScreen()
