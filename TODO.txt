@@ -1,4 +1,6 @@
 / Priority
+ Method access modifiers and methods order is a mess
+ Naming is also a mess
  Proper net multiplayer
  Bonus indicators
  Snake skins
@@ -12,6 +14,8 @@
  Fair 3 players mode
 
 / Other
+ Make executable smaller
+ More visual way to make turns
  "My snakes are" indicator in net mode
  Settings are stored between launches
  Game skins

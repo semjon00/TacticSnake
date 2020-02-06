@@ -17,17 +17,20 @@ public:
 
     GameSettings settings;
 
-    bool cellsAvaible(Snake &snake);
+    bool movesAvaible(Snake &snake);
 
     int getBoardAt(int x, int y);
     void setBoardAt(int x, int y, int val);
 
-    bool turn(short x, short y, Snake &snake);
+    bool turn(short deltaX, short deltaY, Snake &snake);
 
     Game(const GameSettings& _settings);
 
+    const std::pair<int,int> voidCell = {-1,-1};
 private:
     std::vector<std::vector<int>> board;
+
+    std::pair<int, int> getRealCoords(int x, int y);
 };
 
 

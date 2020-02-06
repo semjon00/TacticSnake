@@ -21,66 +21,68 @@ short Snake::getHeadY()
     return visited_cords.back().second;
 }
 
-std::pair<int, int> Snake::makeMove()
+// Asks the snake to pick relative coords to turn to
+std::pair<int, int> Snake::pickTurn()
 {
     switch (control_mode)
     {
     // Player makes a turn
     case PLAYER:
-        short _deltaX, _deltaY;
+        short deltaX=0, deltaY=0;
         flushGetch();
-        _deltaX=0, _deltaY=0;
         char c = 'n';
-        short steps=1;
+        int steps=1;
         do
         {
+            // Extender
             if (c=='q')
             {
-                short mod=1;
-                for (bool i : bonus_avaible)
-                {
-                    if (i)
-                        mod++;
-                }
-                steps%=mod;
-                steps++;
+                int maxExtender = 1 + bonus_avaible[0] + bonus_avaible[1];
+                toggle(steps, 1,maxExtender);
             }
-
             playerBarUpdate(steps, player_number, false);
 
-            // Input intake and preprocessing
-            c = normalized_getch();
-
+            c = waitKey();
         } while (c!='w' && c!='a' && c!='s' && c!='d');
 
-        while (steps)
-        {
+        // Directional
+        while (true) {
             switch (c)
             {
-            case 'w':
-                _deltaY+=-1;
-                break;
-            case 'a':
-                _deltaX+=-1;
-                break;
-            case 's':
-                _deltaY+= 1;
-                break;
-            case 'd':
-                _deltaX+= 1;
-                break;
+                case 'w':
+                    deltaY+=-1;
+                    break;
+                case 'a':
+                    deltaX+=-1;
+                    break;
+                case 's':
+                    deltaY+= 1;
+                    break;
+                case 'd':
+                    deltaX+= 1;
+                    break;
+                default:
+                    // Something made player rethink extender length, it is ok
+                    break;
             }
-            if (c=='w'||c=='a'||c=='s'||c=='d');
-            {
-                steps--;
-                playerBarUpdate(steps, player_number, false);
-            }
-            if (steps!=0)
-                c = normalized_getch();
-        }
-        return std::make_pair(getHeadX()+_deltaX, getHeadY()+_deltaY);
-        break;
+            steps--;
+            playerBarUpdate(steps, player_number, false);
+
+            if (steps == 0)
+                break;
+            else
+                c = waitKey();
+        };
+
+        return std::make_pair(deltaX, deltaY);
     }
+}
+
+// Update to be turned to x,y (real)
+void Snake::makeMove(int x, int y) {
+    drawPart(getHeadX(), getHeadY(), REGULAR);
+    visited_cords.emplace_back(x, y);
+    drawPart(getHeadX(), getHeadY(), HEAD);
 }
 
 void Snake::drawPart(short x, short y, int part)

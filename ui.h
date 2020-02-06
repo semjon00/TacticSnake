@@ -2,6 +2,7 @@
 #define UI_H
 
 #include "GameSettings.h"
+#include <string>
 
 enum ColorSceme
 {
@@ -14,12 +15,13 @@ public:
     static void fancyTitle();
     static int mainScreen();
     static void settingsScreen(GameSettings &changing);
-    static void wrongBuildScreen(int build_number);
+    static void wrongBuildScreen(std::string serverVersion);
 
     // Various customization settings
     static ColorSceme color_sceme;
 
 private:
+
 };
 
 #endif // UI_H

@@ -21,7 +21,7 @@ public:
 
     short getHeadX();
     short getHeadY();
-    std::pair<int, int> makeMove();
+    std::pair<int, int> pickTurn();
     void drawPart(short x, short y, int part);
 
     void lose(bool corpseMode);
@@ -35,6 +35,8 @@ public:
     bool bonus_avaible[2] = {true, true};
     short player_number;
 
+    void makeMove(int x, int y);
+
 protected:
     const char* debris[8][3] = {
     {"   ", "   ", "   "}, // Empty
@@ -46,5 +48,6 @@ protected:
     {"T T", "   ", " _ "}, // Cry emoji head
     {"o -", "   ", " -<"}, // Kiss emoji head
     };
+
 };
 #endif // SNAKE_H

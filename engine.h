@@ -26,13 +26,12 @@ void drawFrame(short x, short y, short dx, short dy, int color, char base);
 void playerBarUpdate(short length, short player_number, bool meIndicator);
 
 short choosing(std::vector<short> Y, short x, int color, const std::string& base);
-void toggle(bool* variable);
-void toggle(int *variable, int min_val, int max_val);
+void toggle(int &variable, int min_val, int max_val);
 
 void _debugCharacterCast();
 void disableBlinking();
 
 void flushGetch();
-char normalized_getch();
+char waitKey();
 
 #endif // ENGINE_H

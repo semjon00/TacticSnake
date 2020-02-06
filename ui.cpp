@@ -34,7 +34,7 @@ int UI::mainScreen()
     draw(10,11,GRAY,"I/O Multiplayer");
     draw(10,14,GRAY,"Settings");
     draw(10,16,GRAY,"Exit");
-    draw(0, 29, Version::BUILD % 7 + 1, Version::versionString);
+    draw(0, 29, Version::BUILD % 7 + 1, Version::STRING);
 
     return choosing({10, 11, 14, 16}, 8, YELLOW, ">");
 }
@@ -64,7 +64,7 @@ void UI::settingsScreen(GameSettings &changing)
         switch(choosing({11, 13, 15, 21, 23}, 4, YELLOW, ">"))
         {
         case 0:
-            toggle(&changing.snakes_total, 2, 4);
+            toggle(changing.snakes_total, 2, 4);
             break;
         case 1:
             changing.corpseMode = !changing.corpseMode;
@@ -82,16 +82,16 @@ void UI::settingsScreen(GameSettings &changing)
     }
 }
 
-void UI::wrongBuildScreen(int build_number)
+void UI::wrongBuildScreen(std::string serverVersion)
 {
     cls();
 
-    draw(7, 10, RED, "Builds do not match!");
-    draw(2, 12, YELLOW, "It looks like you are using an incompatible build...");
-    draw(2, 15, GRAY, "Your build is #" + std::to_string(Version::BUILD));
-    draw(2, 16, GRAY, "Game is run at build #" + std::to_string(build_number));
-    draw(2, 18, GREEN, "Please obtain the most recent");
-    draw(2, 19, GREEN, "build from GitHub.");
+    draw(4, 10, RED, u8"\u2593Builds do not match!\u2593");
+    draw(2, 12, YELLOW, "It looks like you are using   an incompatible version...");
+    draw(2, 15, GRAY, "Your version is  " + Version::STRING);
+    draw(2, 16, GRAY, "But server uses  " + serverVersion);
+    draw(2, 18, GREEN, "Please obtain the most");
+    draw(2, 19, GREEN, "recent build from GitHub.");
 
     _getch();
 }

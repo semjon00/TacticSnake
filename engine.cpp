@@ -84,7 +84,7 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
     while (true)
     {
         draw(x,Y[pointing_to], YELLOW, base);
-        char c = normalized_getch();
+        char c = waitKey();
         draw(x,Y[pointing_to], YELLOW, " ");
         switch (c)
         {
@@ -101,11 +101,11 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
     }
 }
 
-void toggle(int *variable, int min_val, int max_val)
+void toggle(int &variable, int min_val, int max_val)
 {
-    (*variable)++;
-    if ((*variable) == max_val + 1)
-        (*variable) = min_val;
+    variable++;
+    if (variable == max_val + 1)
+        variable = min_val;
 }
 
 void _debugCharacterCast()
@@ -155,7 +155,8 @@ void flushGetch()
     }
 }
 
-char normalized_getch()
+// TODO: Make it return enum element
+char waitKey()
 {
     unsigned char c = _getch();
     if (c==224)
