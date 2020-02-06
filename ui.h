@@ -19,7 +19,6 @@ public:
     // Various customization settings
     static ColorSceme color_sceme;
 
-
 private:
 };
 

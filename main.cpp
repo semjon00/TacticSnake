@@ -1,3 +1,4 @@
+#define _WIN32_WINNT 0x0500
 #include "engine.h"
 #include "ui.h"
 #include "Game.h"
@@ -11,6 +12,8 @@ int main()
     disableBlinking();
     SetConsoleOutputCP(65001);
     UI::fancyTitle();
+    HWND consoleWindow = GetConsoleWindow();
+    SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
 
     GameSettings settings;
 

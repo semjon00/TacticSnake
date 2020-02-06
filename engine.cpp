@@ -77,7 +77,6 @@ void playerBarUpdate(short length, short player_number, bool meIndicator)
         std::cout << ' ';
 }
 
-
 short choosing(std::vector<short> Y, short x, int color, const std::string& base)
 {
     int pointing_to=0;
@@ -104,16 +103,10 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
 
 void toggle(int *variable, int min_val, int max_val)
 {
-    if ((*variable) == max_val)
-    {
+    (*variable)++;
+    if ((*variable) == max_val + 1)
         (*variable) = min_val;
-    }
-    else
-    {
-        (*variable)++;
-    }
 }
-
 
 void _debugCharacterCast()
 {

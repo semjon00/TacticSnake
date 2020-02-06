@@ -1,8 +1,7 @@
-/ Nessesery
- Lists starting point
- Rewrite net module
- Logo
+/ Priority
+ Proper net multiplayer
  Bonus indicators
+ Snake skins
 
 / Gameplay
  Portal-walls
@@ -10,28 +9,12 @@
  No-straight mode (no more 3 straight turns)
  Obstacles
  Changeable field_height and field_width
- 3 players correct
+ Fair 3 players mode
 
-
-/ Coding
- Wrap board as class
- Do not give pointers in initializators
- Initializators rewrite
- snake_colors, starting positions
- Correct destructor
-
-/ Box
- Customization settings
- Smart congratulations
+/ Other
+ "My snakes are" indicator in net mode
+ Settings are stored between launches
+ Game skins
  Net time out
- Even more surprices
- I am always green net coloring mode
- Choosed options highlighting
- Recording and replaying match (with net?)
- Bigger display
- Snake skin
- Notifications
- Line of events
- Faster graphics
- CPU-controll-mode
- 3D field
+ Recording and replaying match
+ CPU-control-mode

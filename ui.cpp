@@ -16,20 +16,25 @@ void UI::fancyTitle()
 
 int UI::mainScreen()
 {
-    // Screen options
     setColor(BLACK);
     cls();
+
+    // TODO: Make change colors using thread
+    const std::string logoStr = u8"   ===  =   == === =  ==\n"
+                                  "    =  === =    =  = =  \n"
+                                  "    = =   = ==  =  =  ==\n"
+                                  "      ╔╕  ╓┐ ╥ ╔═╗ ╥ ╥ ╓──\n"
+                                  "      ╚═╗ ║└┐║ ╟─╢ ║╔╝ ║  \n"
+                                  "      ╓ ║ ║ └╢ ║ ║ ╠╩╗ ╟──\n"
+                                  "      ╚═╝ ╨  ╨ ╨ ╨ ╨ ╨ ╨──\n";
+    draw(0, 1, GREEN, logoStr);
+
+    // Screen options
     draw(10,10,GRAY,"Hot seat");
     draw(10,11,GRAY,"I/O Multiplayer");
     draw(10,14,GRAY,"Settings");
     draw(10,16,GRAY,"Exit");
-
-    // Version of the product
-    gotoXY(0, 29);
-    setColor(Version::BUILD % 7 + 1);
-    std::cout << 'v' << Version::MAJOR << '.'
-              << Version::MINOR << '.'
-              << Version::BUILD;
+    draw(0, 29, Version::BUILD % 7 + 1, Version::versionString);
 
     return choosing({10, 11, 14, 16}, 8, YELLOW, ">");
 }
@@ -82,15 +87,9 @@ void UI::wrongBuildScreen(int build_number)
     cls();
 
     draw(7, 10, RED, "Builds do not match!");
-
     draw(2, 12, YELLOW, "It looks like you are using an incompatible build...");
-
-    draw(2, 15, GRAY, "Your build is #");
-    std::cout << Version::BUILD;
-
-    draw(2, 16, GRAY, "Game is run at build #");
-    std::cout << build_number;
-
+    draw(2, 15, GRAY, "Your build is #" + std::to_string(Version::BUILD));
+    draw(2, 16, GRAY, "Game is run at build #" + std::to_string(build_number));
     draw(2, 18, GREEN, "Please obtain the most recent");
     draw(2, 19, GREEN, "build from GitHub.");
 
