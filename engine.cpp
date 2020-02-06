@@ -79,8 +79,11 @@ void playerBarUpdate(short length, short player_number, bool meIndicator)
 
 short choosing(std::vector<short> Y, short x, int color, const std::string& base)
 {
-    int pointing_to=0;
+    return choosing(Y, x, color, base, 0);
+}
 
+short choosing(std::vector<short> Y, short x, int color, const std::string& base, int pointing_to)
+{
     while (true)
     {
         draw(x,Y[pointing_to], YELLOW, base);

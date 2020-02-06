@@ -31,17 +31,19 @@ int UI::mainScreen()
 
     // Screen options
     draw(10,10,GRAY,"Hot seat");
-    draw(10,11,GRAY,"I/O Multiplayer");
-    draw(10,14,GRAY,"Settings");
+    draw(10,11,GRAY,"Game rules");
+    draw(10,13,GRAY,"Online match");
+    draw(10,15,GRAY,"Appearance");
     draw(10,16,GRAY,"Exit");
     draw(0, 29, Version::BUILD % 7 + 1, Version::STRING);
 
-    return choosing({10, 11, 14, 16}, 8, YELLOW, ">");
+    return choosing({10, 11, 13, 15, 16}, 8, YELLOW, ">");
 }
 
 void UI::settingsScreen(GameSettings &changing)
 {
     bool to_exit = false;
+    int picked = 0;
     while (!to_exit)
     {
         // Screen
@@ -56,12 +58,11 @@ void UI::settingsScreen(GameSettings &changing)
         draw(7, 15, GRAY, "Portal walls ");
         draw(20, 15, GREEN, changing.portal_walls ? "[--I]" : "[O--]");
 
-        draw(7, 21, GRAY, "Open dev codes");
-
         draw(7, 23, GRAY, "Back");
 
         // Choose
-        switch(choosing({11, 13, 15, 21, 23}, 4, YELLOW, ">"))
+        picked = choosing({11, 13, 15, 23}, 4, YELLOW, ">", picked);
+        switch (picked)
         {
         case 0:
             toggle(changing.snakes_total, 2, 4);
@@ -73,16 +74,13 @@ void UI::settingsScreen(GameSettings &changing)
             changing.portal_walls = !changing.portal_walls;
             break;
         case 3:
-            _debugCharacterCast();
-            break;
-        case 4:
             to_exit = true;
             break;
         }
     }
 }
 
-void UI::wrongBuildScreen(std::string serverVersion)
+void UI::wrongBuildScreen(const std::string& serverVersion)
 {
     cls();
 

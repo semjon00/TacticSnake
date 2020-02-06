@@ -15,7 +15,7 @@ public:
     static void fancyTitle();
     static int mainScreen();
     static void settingsScreen(GameSettings &changing);
-    static void wrongBuildScreen(std::string serverVersion);
+    static void wrongBuildScreen(const std::string& serverVersion);
 
     // Various customization settings
     static ColorSceme color_sceme;

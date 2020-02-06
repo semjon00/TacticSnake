@@ -23,14 +23,14 @@ int main()
         if (picked == 0) {
             // NEW GAME
             Game a = Game(settings);
-
-        } else if (picked == 1) {
-            // ASK NET
-
-            // IF OK START GAME
-        } else if (picked == 2) {
+        }  else if (picked == 1) {
             UI::settingsScreen(settings);
+        } else if (picked == 2) {
+            // Get address:room or SERVER order
+            // Get to the game
         } else if (picked == 3) {
+            // Nothing right now
+        } else if (picked == 4) {
             // Exiting game
             draw(10,18,RED*16+GREEN,"GOODBYE!");
             Sleep(1000);
