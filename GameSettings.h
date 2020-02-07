@@ -15,10 +15,11 @@ public:
     short field_width;
     short field_height;
     int snakes_total;
-    std::vector<std::pair<int,int>> obstacle_pos;
     ObstacleMode obstalce_mode;
     bool corpseMode;
     bool portal_walls;
+
+
 };
 
 

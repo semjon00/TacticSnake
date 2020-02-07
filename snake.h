@@ -23,6 +23,7 @@ public:
     short getHeadY();
     std::pair<int, int> pickTurn();
     void drawPart(short x, short y, int part);
+    void makeMove(int x, int y);
 
     void lose(bool corpseMode);
     void win();
@@ -30,12 +31,14 @@ public:
     ControlModes control_mode = PLAYER;
     bool isDead = false;
     std::vector<std::pair<short,short>> visited_cords;
+    int seed;
+    int colors[2];
 
     // Long jump and diagonal
     bool bonus_avaible[2] = {true, true};
     short player_number;
 
-    void makeMove(int x, int y);
+
 
 protected:
     const char* debris[8][3] = {

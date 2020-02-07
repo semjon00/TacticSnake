@@ -40,7 +40,7 @@ Game::Game(const GameSettings& _settings) {
                 } while(!turn(got.first, got.second, snake));
             } else {
                 snake.lose(settings.corpseMode);
-                if (settings.corpseMode)
+                if (!settings.corpseMode)
                     removeCorpse(snake);
                 snakes_alive--;
             }

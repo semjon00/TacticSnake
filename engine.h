@@ -35,4 +35,6 @@ void disableBlinking();
 void flushGetch();
 char waitKey();
 
+unsigned int hash(unsigned int x);
+
 #endif // ENGINE_H

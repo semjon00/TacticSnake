@@ -80,6 +80,35 @@ void UI::settingsScreen(GameSettings &changing)
     }
 }
 
+void UI::appearanceScreen(GameSettings &changing)
+{
+    bool to_exit = false;
+    int picked = 0;
+    while (!to_exit)
+    {
+        // Screen
+        cls();
+
+        draw(7, 11, GRAY, "Strict color mode ");
+        draw(20, 11, GREEN, settings.strict_color_mode ? "[--I]" : "[O--]");
+
+        draw(7, 23, GRAY, "Back");
+
+        // Choose
+        picked = choosing({11, 23}, 4, YELLOW, ">", picked);
+        switch (picked)
+        {
+            case 0:
+                settings.strict_color_mode = !settings.strict_color_mode;
+                break;
+            case 1:
+                to_exit = true;
+                break;
+        }
+    }
+}
+
+
 void UI::wrongBuildScreen(const std::string& serverVersion)
 {
     cls();

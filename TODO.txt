@@ -14,6 +14,7 @@
  Fair 3 players mode
 
 / Other
+ Strings/language system
  Make executable smaller
  More visual way to make turns
  "My snakes are" indicator in net mode

@@ -7,6 +7,13 @@ Snake::Snake(int _player_number, ControlModes _control_mode, std::pair<int, int>
 {
     player_number = _player_number;
     control_mode = _control_mode;
+    seed = rand();
+
+    // TODO: Make colors being picked from const
+    colors[0] = (2*player_number+2)*(16+1)  - 1;
+    colors[1] = (8+2*player_number+2)*(16+1) - 1;
+    if (colors[1] == 271)
+        colors[1] = 113;
 
     visited_cords.emplace_back(startPos);
     drawPart(getHeadX(), getHeadY(), HEAD);
@@ -87,27 +94,14 @@ void Snake::makeMove(int x, int y) {
 
 void Snake::drawPart(short x, short y, int part)
 {
-    int color;
-    switch (part)
+    int color = colors[0];
+
+    if (part == EMPTY)
+        color = 0;
+    else if (part==REGULAR && !UI::settings.strict_color_mode)
     {
-    case REGULAR:
-        color = (2*player_number+2)*(16+1);
-        break;
-    case HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case CORPSE_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case WATSON_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    case WIN_HEAD:
-        color = (2*player_number+2)*(16+1)-1;
-        break;
-    default:
-        color = BLACK;
-        break;
+        if (hash(seed*10000 + x * 100 + y)%3 == 0)
+            color = colors[1];
     }
 
     for(short i=0; i<3; i++)
