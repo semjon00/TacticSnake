@@ -1,0 +1,17 @@
+NET functionality:
+
+Packets should be the following:
+Server:
+    wrongVersion(req)
+    roomConnected(settings, field)
+    ping()
+    notifyTurn(snakei, absx, absy)
+    notifyMessage(id, msg)
+    requestTurn(snakei)
+
+Client:
+    hello(my_version)
+    connectRoom(name)
+    ping()
+    madeTurn(deltax, deltay)
+    message(str)
