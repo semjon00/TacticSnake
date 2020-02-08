@@ -10,6 +10,8 @@
 #include <cstdlib> /* rand */
 #include <ctime> /* for rand initializing */
 
+#include <mutex>
+
 enum Color
 {
     BLACK, DARKBLUE, DARKGREEN, DARKCYAN, DARKRED, DARKMAGENTA, DARKYELLOW,
@@ -22,6 +24,7 @@ void pause(int ms);
 
 void cls();
 void draw(short x, short y, int color, const std::string& outing);
+void _draw(short x, short y, int color, const std::string& outing);
 void drawFrame(short x, short y, short dx, short dy, int color, char base);
 void playerBarUpdate(short length, short player_number, bool meIndicator);
 

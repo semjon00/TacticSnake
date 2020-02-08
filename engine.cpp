@@ -1,13 +1,11 @@
 #include "engine.h"
 
-#include <windows.h>
-#include <stdio.h>
-
+std::mutex drawMutex;
 COORD coord;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 // Change draw-from cell
-void gotoXY(short x, short y)
+void gotoXY(short x, short y) // thread-unsafe
 {
     coord.X = x;
     coord.Y = y;
@@ -15,7 +13,7 @@ void gotoXY(short x, short y)
 }
 
 // Changing color for drawing
-void setColor(int c)
+void setColor(int c) // thread-unsafe
 {
     SetConsoleTextAttribute(hConsole, c);
 }
@@ -26,12 +24,19 @@ void pause(int ms)
     Sleep(ms);
 }
 
-void cls()
+void cls() // thread-unsafe
 {
     system("cls");
 }
 
 void draw(short x, short y, int color, const std::string& outing)
+{
+    drawMutex.lock();
+    _draw(x, y, color, outing);
+    drawMutex.unlock();
+}
+
+void _draw(short x, short y, int color, const std::string& outing) // thread-unsafe
 {
     gotoXY(x, y);
     setColor(color);
@@ -40,6 +45,7 @@ void draw(short x, short y, int color, const std::string& outing)
 
 void drawFrame(short x, short y, short dx, short dy, int color, char base)
 {
+    drawMutex.lock();
     setColor(color);
 
     for(int i=1; i<dy+1; i++)
@@ -55,26 +61,29 @@ void drawFrame(short x, short y, short dx, short dy, int color, char base)
     gotoXY(x,y+dy+1);
     for(int i=0; i<dx+2; i++)
         std::cout << base;
+    drawMutex.unlock();
 }
 
 void playerBarUpdate(short length, short player_number, bool meIndicator)
 {
+    drawMutex.lock();
+
     // Me indicator
-    setColor(DARKGRAY);
-    gotoXY(18,3+3*7+2);
-    std::cout << (meIndicator ? u8"\u2666" : u8" ");
+    _draw(18,3+3*7+2, DARKGRAY, (meIndicator ? u8"\u2666" : u8" "));
 
     // Actual bar
     setColor((player_number+1)*34);
     for (int i=0; i<length; i++)
     {
-        std::cout << (i==0 && meIndicator ? static_cast<char>(257) : ' ');
+        std::cout << (i==0 && meIndicator ? u8"\u0257" : " ");
     }
 
     // Leftovers remove
     setColor(BLACK);
     for (int i=0; i<3-length; i++)
         std::cout << ' ';
+
+    drawMutex.unlock();
 }
 
 short choosing(std::vector<short> Y, short x, int color, const std::string& base)
@@ -84,11 +93,14 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
 
 short choosing(std::vector<short> Y, short x, int color, const std::string& base, int pointing_to)
 {
+    drawMutex.lock();
     while (true)
     {
-        draw(x,Y[pointing_to], YELLOW, base);
+        _draw(x,Y[pointing_to], YELLOW, base);
+        drawMutex.unlock();
         char c = waitKey();
-        draw(x,Y[pointing_to], YELLOW, " ");
+        drawMutex.lock();
+        _draw(x,Y[pointing_to], YELLOW, " ");
         switch (c)
         {
         case 'w':
@@ -98,10 +110,11 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
             pointing_to=(pointing_to+1)%Y.size();
             break;
         case 'd':
+            drawMutex.unlock();
             return pointing_to;
-            break;
         }
     }
+    return -1;
 }
 
 void toggle(int &variable, int min_val, int max_val)
@@ -138,7 +151,6 @@ void _debugCharacterCast()
         c = _getch();
         std::cout << (int)c << ' ';
     } while (c != 'q');
-
 }
 
 void disableBlinking()
