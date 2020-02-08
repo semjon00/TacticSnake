@@ -4,11 +4,6 @@
 #include <iostream>
 #include <vector>
 
-enum ControlModes
-{
-    PLAYER, NET, CPU
-};
-
 enum Part
 {
     EMPTY, REGULAR, HEAD, CORPSE_HEAD, WATSON_HEAD, WIN_HEAD
@@ -17,28 +12,24 @@ enum Part
 class Snake
 {
 public:
-    Snake(int _player_number, ControlModes _control_mode, std::pair<int, int> startPos);
+    Snake(int _player_number, std::pair<int, int> startPos);
 
     short getHeadX();
     short getHeadY();
-    std::pair<int, int> pickTurn();
-    void drawPart(short x, short y, int part);
-    void makeMove(int x, int y);
 
+    virtual std::pair<int, int> pickTurn() =0; // Asks the snake to pick relative coords to turn to
+    virtual void applyTurn(int x, int y); // Update to be turned to x,y (real)
+
+    void drawPart(short x, short y, int part);
     void lose(bool corpseMode);
     void win();
 
-    ControlModes control_mode = PLAYER;
     bool isDead = false;
     std::vector<std::pair<short,short>> visited_cords;
     int seed;
-    int colors[2];
-
-    // Long jump and diagonal
-    bool bonus_avaible[2] = {true, true};
+    int colors[2]; // Base and alternative
+    bool bonus_avaible[2] = {true, true}; // Long jump and diagonal
     short player_number;
-
-
 
 protected:
     const char* debris[8][3] = {

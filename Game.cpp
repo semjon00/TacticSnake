@@ -1,5 +1,7 @@
+#include <memory>
 #include "Game.h"
 #include "engine.h"
+#include "Player.h"
 
 Game::Game(const GameSettings& _settings) {
     settings = _settings;
@@ -11,10 +13,10 @@ Game::Game(const GameSettings& _settings) {
 
     // Init
     board = std::vector<std::vector<int>> (settings.field_width, std::vector<int> (settings.field_height, -1));
-    std::vector<Snake> snakes;
+    std::vector<Snake*> snakes;
     for(int i = 0; i<settings.snakes_total; i++)
     {
-        snakes.push_back(Snake(i, PLAYER, spawn_coords[i]));
+        snakes.emplace_back(new Player(i, spawn_coords[i]));
         board[spawn_coords[i].first][spawn_coords[i].second] = i;
     }
     snakes_alive = settings.snakes_total;
@@ -25,21 +27,21 @@ Game::Game(const GameSettings& _settings) {
         for(auto & snake : snakes)
         {
             // Main loop
-            if (snake.isDead)
+            if (snake->isDead)
                 continue;
 
             if (snakes_alive<=1)
             {
-                snake.win();
+                snake->win();
                 isGameOn = false;
             }
             else if (movesAvaible(snake)) {
                 std::pair<int,int> got;
                 do {
-                    got = snake.pickTurn();
+                    got = snake->pickTurn();
                 } while(!turn(got.first, got.second, snake));
             } else {
-                snake.lose(settings.corpseMode);
+                snake->lose(settings.corpseMode);
                 if (!settings.corpseMode)
                     removeCorpse(snake);
                 snakes_alive--;
@@ -55,8 +57,8 @@ Game::Game(std::string ip) {
     // For Net
 }
 
-void Game::removeCorpse(Snake &snake) {
-    for(auto & visited_cord : snake.visited_cords)
+void Game::removeCorpse(Snake *snake) {
+    for(auto & visited_cord : snake->visited_cords)
     {
         board[visited_cord.first][visited_cord.second] = -1;
     }
@@ -90,7 +92,7 @@ std::pair<int,int> Game::getRealCoords(int x, int y)
         return voidCell;
 }
 
-bool Game::movesAvaible(Snake &snake)
+bool Game::movesAvaible(Snake *snake)
 {
     bool avaible = false;
 
@@ -99,29 +101,29 @@ bool Game::movesAvaible(Snake &snake)
         for (short k2=0; k2<2; ++k2)
         {
             // Checking adjacent-cell moves
-            if (getBoardAt(snake.getHeadX() + (k2 ? 0 : k1), snake.getHeadY() + (k2 ? k1 : 0)) == -1)
+            if (getBoardAt(snake->getHeadX() + (k2 ? 0 : k1), snake->getHeadY() + (k2 ? k1 : 0)) == -1)
                 avaible = true;
 
             // Checking jumps
-            if (snake.bonus_avaible[0] && (getBoardAt(snake.getHeadX() + (k2 ? 0 : k1 * 2),
-                                                      snake.getHeadY() + (k2 ? k1 * 2 : 0)) == -1))
+            if (snake->bonus_avaible[0] && (getBoardAt(snake->getHeadX() + (k2 ? 0 : k1 * 2),
+                                                      snake->getHeadY() + (k2 ? k1 * 2 : 0)) == -1))
                 avaible = true;
 
             // Checking "knight" moves
-            if (snake.bonus_avaible[0] && snake.bonus_avaible[1])
+            if (snake->bonus_avaible[0] && snake->bonus_avaible[1])
             {
-                if (getBoardAt(snake.getHeadX() + k1, snake.getHeadY() + k2 * 4 - 2) == -1 || \
-                    getBoardAt(snake.getHeadX() + k2 * 4 - 2, snake.getHeadY() + k1) == -1 )
+                if (getBoardAt(snake->getHeadX() + k1, snake->getHeadY() + k2 * 4 - 2) == -1 || \
+                    getBoardAt(snake->getHeadX() + k2 * 4 - 2, snake->getHeadY() + k1) == -1 )
                     avaible = true;
             }
         }
 
         // Checking diagonal moves
-        if (snake.bonus_avaible[1])
+        if (snake->bonus_avaible[1])
         {
             for (short k2=-1; k2<2; k2+=2)
             {
-                if (getBoardAt(snake.getHeadX() + k1, snake.getHeadY() + k2) == -1)
+                if (getBoardAt(snake->getHeadX() + k1, snake->getHeadY() + k2) == -1)
                     avaible = true;
             }
         }
@@ -130,11 +132,11 @@ bool Game::movesAvaible(Snake &snake)
 }
 
 // Attempt to turn the snake, given relative coords
-bool Game::turn(short deltaX, short deltaY, Snake &snake)
+bool Game::turn(short deltaX, short deltaY, Snake *snake)
 {
     bool bonuses_to_take[2] = {false, false};
 
-    std::pair<int,int> newRaw = {snake.getHeadX() + deltaX, snake.getHeadY() + deltaY};
+    std::pair<int,int> newRaw = {snake->getHeadX() + deltaX, snake->getHeadY() + deltaY};
 
     // Check if cell is available
     if (getBoardAt(newRaw.first, newRaw.second) != -1)
@@ -148,7 +150,7 @@ bool Game::turn(short deltaX, short deltaY, Snake &snake)
     // Long jump handeling
     if (abs(deltaX)==2||abs(deltaY)==2)
     {
-        if (!snake.bonus_avaible[0])
+        if (!snake->bonus_avaible[0])
             return false;
         else
             bonuses_to_take[0]=true;
@@ -157,7 +159,7 @@ bool Game::turn(short deltaX, short deltaY, Snake &snake)
     // Diagonal handeling
     if (abs(deltaX)>=1&&abs(deltaY)>=1)
     {
-        if (!snake.bonus_avaible[1])
+        if (!snake->bonus_avaible[1])
             return false;
         else
             bonuses_to_take[1]=true;
@@ -165,12 +167,12 @@ bool Game::turn(short deltaX, short deltaY, Snake &snake)
 
 
     // Updating bonuses
-    snake.bonus_avaible[0] &= !bonuses_to_take[0];
-    snake.bonus_avaible[1] &= !bonuses_to_take[1];
+    snake->bonus_avaible[0] &= !bonuses_to_take[0];
+    snake->bonus_avaible[1] &= !bonuses_to_take[1];
 
     std::pair<int,int> newReal = getRealCoords(newRaw.first, newRaw.second);
-    snake.makeMove(newReal.first, newReal.second);
-    setBoardAt(newReal.first, newReal.second, snake.player_number);
+    snake->applyTurn(newReal.first, newReal.second);
+    setBoardAt(newReal.first, newReal.second, snake->player_number);
     return true;
 }
 

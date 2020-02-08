@@ -7,7 +7,7 @@
 
 class Game {
     Game(std::string ip);
-    void removeCorpse(Snake &snake);
+    void removeCorpse(Snake *snake);
 
     int snakes_alive;
     int isGameOn = true;
@@ -17,12 +17,12 @@ public:
 
     GameSettings settings;
 
-    bool movesAvaible(Snake &snake);
+    bool movesAvaible(Snake *snake);
 
     int getBoardAt(int x, int y);
     void setBoardAt(int x, int y, int val);
 
-    bool turn(short deltaX, short deltaY, Snake &snake);
+    bool turn(short deltaX, short deltaY, Snake *snake);
 
     Game(const GameSettings& _settings);
 
