@@ -3,7 +3,6 @@
  Naming is also a mess
  Proper net multiplayer
  Bonus indicators
- Snake skins
 
 / Gameplay
  Portal-walls
@@ -23,3 +22,4 @@
  Net time out
  Recording and replaying match
  CPU-control-mode
+ More snake customization

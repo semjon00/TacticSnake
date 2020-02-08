@@ -14,7 +14,7 @@ Game::Game(const GameSettings& _settings) {
     std::vector<Snake> snakes;
     for(int i = 0; i<settings.snakes_total; i++)
     {
-        snakes.push_back(Snake(i, PLAYER, spawn_coords[i]));
+        snakes.emplace_back(i, PLAYER, spawn_coords[i]);
         board[spawn_coords[i].first][spawn_coords[i].second] = i;
     }
     snakes_alive = settings.snakes_total;
@@ -48,7 +48,6 @@ Game::Game(const GameSettings& _settings) {
     }
 
     Sleep(2000);
-    cls();
 }
 
 Game::Game(std::string ip) {
