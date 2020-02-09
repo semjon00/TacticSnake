@@ -122,3 +122,59 @@ void UI::wrongBuildScreen(const std::string& serverVersion)
 
     _getch();
 }
+
+std::string UI::getOnlineString(std::string str)
+{
+    cls();
+    draw(1, 2, BLUE, "Please input server address   and room.");
+    drawFrame(1, 5, 25, 1, DARKCYAN*16+DARKRED, '.');
+    int strcolor = GRAY;
+
+    const std::string SERVER = "SERVER";
+    const int SERVERCOLOR = WHITE*16 + DARKRED;
+
+    bool redraw = true;
+    while (true)
+    {
+        if (str == SERVER && strcolor != SERVERCOLOR)
+        {
+            redraw = true;
+            strcolor = SERVERCOLOR;
+        }
+        if (str != SERVER && strcolor == SERVERCOLOR)
+        {
+            redraw = true;
+            strcolor = GRAY;
+        }
+
+        flushGetch();
+        if (redraw)
+        {
+            redraw = !redraw;
+            draw(2, 6, strcolor, str);
+        }
+
+        char c = waitKey();
+        switch (c)
+        {
+            case '\b': // Backspace
+                if (!str.empty())
+                {
+                    str.pop_back();
+                    draw(1+str.size()+1, 6, 0, " ");
+                }
+                break;
+            case '\033': // Esc
+                return std::string();
+            case '\r': // Enter
+                return str;
+            default:
+                if (c >= 32 && c <= 122 && str.size() < 25)
+                {
+                    str.push_back(c);
+                    draw(1+str.size(), 6, 7, std::string(1,c));
+                }
+                break;
+        }
+    }
+}

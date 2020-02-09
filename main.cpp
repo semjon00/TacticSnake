@@ -2,11 +2,13 @@
 #include "engine.h"
 #include "ui.h"
 #include "Game.h"
+#include "Server.h"
+#include "Client.h"
 #include <windows.h>
 
 int main()
 {
-    // _debugCharacterCast();
+    //_debugCharacterCast();
 
     system("MODE 30,30");
     disableBlinking();
@@ -18,18 +20,29 @@ int main()
     srand(time(nullptr));
 
     GameSettings settings;
+    std::string previousServerString;
 
     while(true)
     {
         flushGetch();
         int picked = UI::mainScreen();
         if (picked == 0) {
-            // NEW GAME
             Game a = Game(settings);
-        }  else if (picked == 1) {
+        } else if (picked == 1) {
             UI::settingsScreen(settings);
         } else if (picked == 2) {
-            // Get address:room or SERVER order
+            while (true) {
+                std::string online_string = UI::getOnlineString(previousServerString);
+                if (online_string.empty())
+                    break;
+                else
+                    previousServerString = online_string;
+
+                if (online_string == "SERVER")
+                    new Server();
+                else
+                    Client current = Client(online_string);
+            };
             // Get to the game
         } else if (picked == 3) {
             UI::appearanceScreen(settings);

@@ -2,16 +2,17 @@ NET functionality:
 
 Packets should be the following:
 Server:
-    wrongVersion(req)
-    roomConnected(settings, field)
+    roomConnectionFailure(msg)
+    roomConnectionSuccess(settings, field)
     ping()
-    notifyTurn(snakei, absx, absy)
+    notifyTurn(snakei, absx, absy, nextsnakei)
     notifyMessage(id, msg)
+    notifyLose(snakei)
+    notifyWin(snakei)
     requestTurn(snakei)
 
 Client:
-    hello(my_version)
-    connectRoom(name)
+    roomConnect(my_version, room)
     ping()
     madeTurn(deltax, deltay)
     message(str)

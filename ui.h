@@ -20,11 +20,12 @@ class UI
 public:
     static void fancyTitle();
     static int mainScreen();
-
     static void settingsScreen(GameSettings &changing);
-    static void appearanceScreen(GameSettings &changing);
 
+    static std::string getOnlineString(std::string str);
     static void wrongBuildScreen(const std::string& serverVersion);
+
+    static void appearanceScreen(GameSettings &changing);
 
     // Various customization settings
     inline static Settings settings;
