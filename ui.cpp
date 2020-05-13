@@ -120,5 +120,5 @@ void UI::wrongBuildScreen(const std::string& serverVersion)
     draw(2, 18, GREEN, "Please obtain the most");
     draw(2, 19, GREEN, "recent build from GitHub.");
 
-    _getch();
+    discardKeypress();
 }

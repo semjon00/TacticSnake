@@ -1,12 +1,35 @@
 #include "engine.h"
 
+#include <iostream>
+#include <vector>
 #include <windows.h>
-#include <stdio.h>
+#include <conio.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
-COORD coord;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+#define _WIN32_WINNT 0x0500
+void initInterface()
+{
+    // Set width and height
+    system("MODE 30,30");
+
+    // Disable blinking
+    CONSOLE_CURSOR_INFO CursoInfo;
+    CursoInfo.dwSize = 1;
+    CursoInfo.bVisible = false;
+    SetConsoleCursorInfo(hConsole, &CursoInfo);
+
+    // ???
+    SetConsoleOutputCP(65001);
+    HWND consoleWindow = GetConsoleWindow();
+    SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
+}
 
 // Change draw-from cell
+COORD coord;
 void gotoXY(short x, short y)
 {
     coord.X = x;
@@ -29,6 +52,21 @@ void pause(int ms)
 void cls()
 {
     system("cls");
+}
+
+bool keypressBuffered()
+{
+    return kbhit();
+}
+
+void discardKeypress()
+{
+    _getch();
+}
+
+int popKeypress()
+{
+    return _getch();
 }
 
 void draw(short x, short y, int color, const std::string& outing)
@@ -59,7 +97,7 @@ void drawFrame(short x, short y, short dx, short dy, int color, char base)
 
 void playerBarUpdate(short length, short player_number, bool meIndicator)
 {
-    // Me indicator
+    // Me indicatorhash
     setColor(DARKGRAY);
     gotoXY(18,3+3*7+2);
     std::cout << (meIndicator ? u8"\u2666" : u8" ");
@@ -111,7 +149,7 @@ void toggle(int &variable, int min_val, int max_val)
         variable = min_val;
 }
 
-void _debugCharacterCast()
+void debugCharacterCast()
 {
     setColor(GRAY);
     gotoXY(0,0);
@@ -135,35 +173,26 @@ void _debugCharacterCast()
 
     unsigned char c;
     do {
-        c = _getch();
+        c = popKeypress();
         std::cout << (int)c << ' ';
     } while (c != 'q');
 
 }
 
-void disableBlinking()
-{
-    CONSOLE_CURSOR_INFO CursoInfo;
-    CursoInfo.dwSize = 1;
-    CursoInfo.bVisible = false;
-    SetConsoleCursorInfo(hConsole, &CursoInfo);
-}
-
 void flushGetch()
 {
-    while (kbhit())
+    while (keypressBuffered())
     {
-        _getch();
-        // result gets discarded
+        discardKeypress();
     }
 }
 
 // TODO: Make it return enum element
 char waitKey()
 {
-    unsigned char c = _getch();
+    unsigned char c = popKeypress();
     if (c==224)
-        c = _getch();
+        c = popKeypress();
 
     // Arrow keys
     if (c==72)

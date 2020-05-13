@@ -120,19 +120,19 @@ void Snake::lose(bool corpseMode)
     if (!corpseMode)
     {
         // No-corpse mode animation and effects
-        Sleep(250);
+        pause(250);
         drawPart(getHeadX(), getHeadY(), CORPSE_HEAD);
-        Sleep(250);
+        pause(250);
         for(auto & visited_cord : visited_cords)
         {
             drawPart(visited_cord.first, visited_cord.second, EMPTY);
-            Sleep(100);
+            pause(100);
         }
     }
     else
     {
         // Corpse mode animation
-        Sleep(250);
+        pause(250);
         drawPart(getHeadX(), getHeadY(), CORPSE_HEAD);
     }
 }

@@ -1,19 +1,13 @@
-#define _WIN32_WINNT 0x0500
+#include <ctime>
+
 #include "engine.h"
 #include "ui.h"
 #include "Game.h"
-#include <windows.h>
 
 int main()
 {
-    // _debugCharacterCast();
-
-    system("MODE 30,30");
-    disableBlinking();
+    initInterface();
     UI::fancyTitle();
-    SetConsoleOutputCP(65001);
-    HWND consoleWindow = GetConsoleWindow();
-    SetWindowLong(consoleWindow, GWL_STYLE, GetWindowLong(consoleWindow, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
 
     srand(time(nullptr));
 
@@ -36,7 +30,7 @@ int main()
         } else if (picked == 4) {
             // Exiting game
             draw(10,18,RED*16+GREEN,"GOODBYE!");
-            Sleep(1000);
+            pause(1000);
             setColor(0);
             gotoXY(15,18);
             break;

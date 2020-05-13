@@ -47,7 +47,7 @@ Game::Game(const GameSettings& _settings) {
         }
     }
 
-    Sleep(2000);
+    pause(2000);
 }
 
 Game::Game(std::string ip) {
