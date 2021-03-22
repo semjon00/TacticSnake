@@ -40,8 +40,9 @@ int main()
 
                 if (online_string == "SERVER")
                     new Server();
-                else
-                    Client current = Client(online_string);
+                else {
+                    //Client current = Client(online_string);
+                }
             };
             // Get to the game
         } else if (picked == 3) {
