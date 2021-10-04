@@ -6,12 +6,16 @@
 void UI::fancyTitle()
 {
     // Header with easter egg
-    if (rand()%50 != 0)
-        system("title Tactic Snake!");
-    else if (rand()%2 == 0)
-        system("title Tactic Sanek!");
-    else
-        system("title tic tac Snake!");
+    if (rand() % 50 != 0)
+        title("Tactic Snake!");
+    else {
+        std::string easterEggStrings[] = {
+                "Tactic Sanek!",
+                "tic tac Snake!"
+        };
+        std::string &picked = easterEggStrings[rand() % (sizeof(easterEggStrings)/sizeof(*easterEggStrings))];
+        title(picked);
+    }
 }
 
 int UI::mainScreen()

@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 #define _WIN32_WINNT 0x0500
@@ -43,10 +44,15 @@ void setColor(int c)
     SetConsoleTextAttribute(hConsole, c);
 }
 
+// Pauses code executing
 void pause(int ms)
 {
-    // Pauses code executing
     Sleep(ms);
+}
+
+void title(const std::string& title)
+{
+    system(("title " + title).c_str());
 }
 
 void cls()
