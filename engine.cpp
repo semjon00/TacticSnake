@@ -2,13 +2,15 @@
 
 #include <iostream>
 #include <vector>
-#include <windows.h>
-#include <conio.h>
 #include <cstdlib>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <string>
+
+#ifdef _WIN32
+#include <windows.h>
+
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 #define _WIN32_WINNT 0x0500
@@ -74,6 +76,81 @@ int popKeypress()
 {
     return _getch();
 }
+#endif
+#ifdef __linux__
+#include <unistd.h>
+#include <termios.h>
+
+void initInterface() {
+    // Set width and height
+    system("stty raw");
+    std::cout << '\033' << "[8;50;100t";
+}
+
+void gotoXY(short x, short y) {
+    std::cout << "\033" << "[" << y << ";" << x << "H";
+}
+
+void setColor(int c) {
+    int background = c / 16;
+    int foreground = c % 16;
+
+    int ans0 = -1;
+    int ans1 = -1;
+
+    for (auto& cf : {background, foreground}) {
+        int linux_color = -1;
+        if (cf == BLACK) linux_color = 30;
+        if (cf == DARKRED) linux_color = 31;
+        if (cf == DARKGREEN) linux_color = 32;
+        if (cf == DARKYELLOW) linux_color = 33;
+        if (cf == DARKBLUE) linux_color = 34;
+        if (cf == DARKMAGENTA) linux_color = 35;
+        if (cf == DARKCYAN) linux_color = 36;
+        if (cf == GRAY) linux_color = 37;
+
+        if (cf == DARKGRAY) linux_color = 90;
+        if (cf == RED) linux_color = 91;
+        if (cf == GREEN) linux_color = 92;
+        if (cf == YELLOW) linux_color = 93;
+        if (cf == BLUE) linux_color = 94;
+        if (cf == MAGENTA) linux_color = 95;
+        if (cf == CYAN) linux_color = 96;
+        if (cf == WHITE) linux_color = 97;
+
+        if (ans0 == -1) ans0 = linux_color + 10;
+        else if (ans1 == -1) ans1 = linux_color;
+    }
+
+    std::cout << "\033[" << ans0 << ";" << ans1 << "m";
+}
+
+void pause(int ms) {
+    sleep(ms);
+}
+
+void title(const std::string& title) {
+    std::cout << "\033]0;" << title << "\007";
+}
+
+void cls() {
+    std::cout << "\033[2J\033[1;1H";
+}
+
+bool keypressBuffered() {
+    return false; // TODO: fix
+}
+
+void discardKeypress() {
+    // TODO: fix
+}
+
+int popKeypress() {
+    setColor(16*BLACK+BLACK);
+    gotoXY(30,30);
+    return getchar();
+}
+#endif
 
 void draw(short x, short y, int color, const std::string& outing)
 {

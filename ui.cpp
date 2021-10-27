@@ -24,13 +24,13 @@ int UI::mainScreen()
     cls();
 
     // TODO: Make change colors using thread
-    const std::string logoStr = u8"   ===  =   == === =  ==\n"
-                                  "    =  === =    =  = =  \n"
-                                  "    = =   = ==  =  =  ==\n"
-                                  "      ╔╕  ╓┐ ╥ ╔═╗ ╥ ╥ ╓──\n"
-                                  "      ╚═╗ ║└┐║ ╟─╢ ║╔╝ ║  \n"
-                                  "      ╓ ║ ║ └╢ ║ ║ ╠╩╗ ╟──\n"
-                                  "      ╚═╝ ╨  ╨ ╨ ╨ ╨ ╨ ╨──\n";
+    const std::string logoStr = u8"   ===  =   == === =  ==  \r\n"
+                                  "    =  === =    =  = =    \r\n"
+                                  "    = =   = ==  =  =  ==  \r\n"
+                                  "      ╔╕  ╓┐ ╥ ╔═╗ ╥ ╥ ╓──\r\n"
+                                  "      ╚═╗ ║└┐║ ╟─╢ ║╔╝ ║  \r\n"
+                                  "      ╓ ║ ║ └╢ ║ ║ ╠╩╗ ╟──\r\n"
+                                  "      ╚═╝ ╨  ╨ ╨ ╨ ╨ ╨ ╨──\r\n";
     draw(0, 1, GREEN, logoStr);
 
     // Screen options
