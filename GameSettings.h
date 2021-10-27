@@ -1,13 +1,6 @@
 #ifndef TACTICSNAKE_GAMESETTINGS_H
 #define TACTICSNAKE_GAMESETTINGS_H
 
-#include <vector>
-
-enum ObstacleMode
-{
-    NONE, FAIR, RANDOM
-};
-
 class GameSettings {
 public:
     GameSettings();
@@ -15,11 +8,8 @@ public:
     short field_width;
     short field_height;
     int snakes_total;
-    ObstacleMode obstalce_mode;
     bool corpseMode;
     bool portal_walls;
-
-
 };
 
 

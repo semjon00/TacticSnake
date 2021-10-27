@@ -3,17 +3,13 @@
 #include "engine.h"
 #include "ui.h"
 
-Snake::Snake(int _player_number, ControlModes _control_mode, std::pair<int, int> startPos)
+Snake::Snake(int _player_number, std::pair<int, int> startPos)
 {
     player_number = _player_number;
-    control_mode = _control_mode;
     seed = rand();
 
-    // TODO: Make colors being picked from const
-    colors[0] = (2*player_number+2)*(16+1)  - 1;
-    colors[1] = (8+2*player_number+2)*(16+1) - 1;
-    if (colors[1] == 271)
-        colors[1] = 113;
+    colors[0] = snakes_colors[player_number][0];
+    colors[1] = snakes_colors[player_number][1];
 
     visited_cords.emplace_back(startPos);
     drawPart(getHeadX(), getHeadY(), HEAD);
@@ -31,10 +27,8 @@ short Snake::getHeadY()
 // Asks the snake to pick relative coords to turn to
 std::pair<int, int> Snake::pickTurn()
 {
-    switch (control_mode)
     {
     // Player makes a turn
-    case PLAYER:
         short deltaX=0, deltaY=0;
         flushGetch();
         char c = 'n';
@@ -74,6 +68,7 @@ std::pair<int, int> Snake::pickTurn()
             }
             steps--;
             playerBarUpdate(steps, player_number, false);
+            draw(1,1,((rand() % 14) + 1)*17, " ");
 
             if (steps == 0)
                 break;
@@ -81,6 +76,7 @@ std::pair<int, int> Snake::pickTurn()
                 c = waitKey();
         };
 
+        // draw(1,1,(player_number+3)*17, "X");
         return std::make_pair(deltaX, deltaY);
     }
 }

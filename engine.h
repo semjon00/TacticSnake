@@ -21,7 +21,7 @@ void cls();
 
 bool keypressBuffered();
 void discardKeypress();
-int popKeypress();
+unsigned char popKeypress();
 
 void draw(short x, short y, int color, const std::string& outing);
 void drawFrame(short x, short y, short dx, short dy, int color, char base);
@@ -34,7 +34,7 @@ void toggle(int &variable, int min_val, int max_val);
 void debugCharacterCast();
 
 void flushGetch();
-char waitKey();
+unsigned char waitKey();
 
 unsigned int hash(unsigned int x);
 

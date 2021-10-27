@@ -14,7 +14,7 @@ Game::Game(const GameSettings& _settings) {
     std::vector<Snake> snakes;
     for(int i = 0; i<settings.snakes_total; i++)
     {
-        snakes.emplace_back(i, PLAYER, spawn_coords[i]);
+        snakes.emplace_back(i, spawn_coords[i]);
         board[spawn_coords[i].first][spawn_coords[i].second] = i;
     }
     snakes_alive = settings.snakes_total;
@@ -32,8 +32,9 @@ Game::Game(const GameSettings& _settings) {
             {
                 snake.win();
                 isGameOn = false;
+                break;
             }
-            else if (movesAvaible(snake)) {
+            if (movesAvailable(snake)) {
                 std::pair<int,int> got;
                 do {
                     got = snake.pickTurn();
@@ -48,10 +49,6 @@ Game::Game(const GameSettings& _settings) {
     }
 
     pause(2000);
-}
-
-Game::Game(std::string ip) {
-    // For Net
 }
 
 void Game::removeCorpse(Snake &snake) {
@@ -89,7 +86,7 @@ std::pair<int,int> Game::getRealCoords(int x, int y)
         return voidCell;
 }
 
-bool Game::movesAvaible(Snake &snake)
+bool Game::movesAvailable(Snake &snake)
 {
     bool avaible = false;
 

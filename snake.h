@@ -3,21 +3,17 @@
 
 #include <iostream>
 #include <vector>
-
-enum ControlModes
-{
-    PLAYER, NET, CPU
-};
+#include "engine.h"
 
 enum Part
 {
-    EMPTY, REGULAR, HEAD, CORPSE_HEAD, WATSON_HEAD, WIN_HEAD
+    EMPTY, REGULAR, HEAD, CORPSE_HEAD, WIN_HEAD
 };
 
 class Snake
 {
 public:
-    Snake(int _player_number, ControlModes _control_mode, std::pair<int, int> startPos);
+    Snake(int _player_number, std::pair<int, int> startPos);
 
     short getHeadX();
     short getHeadY();
@@ -28,7 +24,6 @@ public:
     void lose(bool corpseMode);
     void win();
 
-    ControlModes control_mode = PLAYER;
     bool isDead = false;
     std::vector<std::pair<short,short>> visited_cords;
     int seed;
@@ -42,14 +37,21 @@ public:
 
 protected:
     const char* debris[8][3] = {
-    {"   ", "   ", "   "}, // Empty
-    {"   ", "   ", "   "}, // Regular
-    {"* *", "   ", "___"}, // Head
-    {"x x", "   ", "___"}, // Corpse head
-    {"o^o", "   ", "__j"}, // Watson head
-    {"^ ^", "   ", "c_j"}, // Win head
-    {"T T", "   ", " _ "}, // Cry emoji head
-    {"o -", "   ", " -<"}, // Kiss emoji head
+            {"   ", "   ", "   "}, // Empty
+            {"   ", "   ", "   "}, // Regular
+            {"* *", "   ", "___"}, // Head
+            {"x x", "   ", "___"}, // Corpse head
+            {"o^o", "   ", "__j"}, // Watson head
+            {"^ ^", "   ", "c_j"}, // Win head
+            {"T T", "   ", " _ "}, // Cry emoji head
+            {"o -", "   ", " -<"}, // Kiss emoji head
+    };
+
+    const int snakes_colors[4][2] = {
+            {16*DARKGREEN + DARKBLUE, 16*GREEN + BLACK},
+            {16*DARKRED + DARKCYAN, 16*RED + BLACK},
+            {16*DARKYELLOW + DARKMAGENTA, 16*YELLOW + BLACK},
+            {16*DARKGRAY + WHITE, 16*GRAY + BLACK},
     };
 
 };

@@ -23,15 +23,12 @@ int main()
         }  else if (picked == 1) {
             UI::settingsScreen(settings);
         } else if (picked == 2) {
-            // Get address:room or SERVER order
-            // Get to the game
-        } else if (picked == 3) {
             UI::appearanceScreen(settings);
-        } else if (picked == 4) {
+        } else if (picked == 3) {
             // Exiting game
             draw(10,18,RED*16+GREEN,"GOODBYE!");
             pause(1000);
-            setColor(0);
+            setColor(BLACK);
             gotoXY(15,18);
             break;
         }

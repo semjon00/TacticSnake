@@ -11,7 +11,8 @@ void UI::fancyTitle()
     else {
         std::string easterEggStrings[] = {
                 "Tactic Sanek!",
-                "tic tac Snake!"
+                "tic tac Snake!",
+                "3+ years in the making!"
         };
         std::string &picked = easterEggStrings[rand() % (sizeof(easterEggStrings)/sizeof(*easterEggStrings))];
         title(picked);
@@ -20,7 +21,6 @@ void UI::fancyTitle()
 
 int UI::mainScreen()
 {
-    setColor(BLACK);
     cls();
 
     // TODO: Make change colors using thread
@@ -36,12 +36,11 @@ int UI::mainScreen()
     // Screen options
     draw(10,10,GRAY,"Hot seat");
     draw(10,11,GRAY,"Game rules");
-    draw(10,13,GRAY,"Online match");
-    draw(10,15,GRAY,"Appearance");
+    draw(10,13,GRAY,"Appearance");
     draw(10,16,GRAY,"Exit");
-    draw(0, 29, Version::BUILD % 7 + 1, Version::STRING);
+    draw(0, 29, Version::BUILD % 7 + 1, Version::getVersion());
 
-    return choosing({10, 11, 13, 15, 16}, 8, YELLOW, ">");
+    return choosing({10, 11, 13, 16}, 8, YELLOW, ">");
 }
 
 void UI::settingsScreen(GameSettings &changing)
@@ -110,19 +109,4 @@ void UI::appearanceScreen(GameSettings &changing)
                 break;
         }
     }
-}
-
-
-void UI::wrongBuildScreen(const std::string& serverVersion)
-{
-    cls();
-
-    draw(4, 10, RED, u8"\u2593Builds do not match!\u2593");
-    draw(2, 12, YELLOW, "It looks like you are using   an incompatible version...");
-    draw(2, 15, GRAY, "Your version is  " + Version::STRING);
-    draw(2, 16, GRAY, "But server uses  " + serverVersion);
-    draw(2, 18, GREEN, "Please obtain the most");
-    draw(2, 19, GREEN, "recent build from GitHub.");
-
-    discardKeypress();
 }

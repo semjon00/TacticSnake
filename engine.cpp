@@ -4,13 +4,11 @@
 #include <vector>
 #include <cstdlib>
 #include <cstdio>
-#include <cstdlib>
-#include <ctime>
 #include <string>
 
 #ifdef _WIN32
 #include <windows.h>
-
+#include <conio.h>
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 #define _WIN32_WINNT 0x0500
@@ -59,6 +57,7 @@ void title(const std::string& title)
 
 void cls()
 {
+    setColor(BLACK);
     system("cls");
 }
 
@@ -72,7 +71,7 @@ void discardKeypress()
     _getch();
 }
 
-int popKeypress()
+unsigned char popKeypress()
 {
     return _getch();
 }
@@ -82,8 +81,10 @@ int popKeypress()
 #include <termios.h>
 
 void initInterface() {
-    // Set width and height
+    // Enable one-keypress reads
     system("stty raw");
+
+    // Set width and height
     std::cout << '\033' << "[8;50;100t";
 }
 
@@ -134,6 +135,7 @@ void title(const std::string& title) {
 }
 
 void cls() {
+    setColor(BLACK);
     std::cout << "\033[2J\033[1;1H";
 }
 
@@ -145,7 +147,7 @@ void discardKeypress() {
     // TODO: fix
 }
 
-int popKeypress() {
+unsigned char popKeypress() {
     setColor(16*BLACK+BLACK);
     gotoXY(30,30);
     return getchar();
@@ -180,7 +182,7 @@ void drawFrame(short x, short y, short dx, short dy, int color, char base)
 
 void playerBarUpdate(short length, short player_number, bool meIndicator)
 {
-    // Me indicatorhash
+    // Me indicator
     setColor(DARKGRAY);
     gotoXY(18,3+3*7+2);
     std::cout << (meIndicator ? u8"\u2666" : u8" ");
@@ -208,7 +210,7 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
     while (true)
     {
         draw(x,Y[pointing_to], YELLOW, base);
-        char c = waitKey();
+        unsigned char c = waitKey();
         draw(x,Y[pointing_to], YELLOW, " ");
         switch (c)
         {
@@ -232,36 +234,6 @@ void toggle(int &variable, int min_val, int max_val)
         variable = min_val;
 }
 
-void debugCharacterCast()
-{
-    setColor(GRAY);
-    gotoXY(0,0);
-    cls();
-
-    // Drawing symbols
-    for(int i=176; i<=287; i++)
-    {
-        if (i==255||i==256||i==263||i==264||i==265||i==266||(i>=224 && i<=241))
-            continue;
-        std::cout << i << ' ' << static_cast<char>(i) << ' ';
-    }
-    std::cout << "\n\n";
-
-    // Drawing colors
-    for(int i=0; i<16; i++)
-    {
-        setColor(i);
-        std::cout << i << ' ';
-    }
-
-    unsigned char c;
-    do {
-        c = popKeypress();
-        std::cout << (int)c << ' ';
-    } while (c != 'q');
-
-}
-
 void flushGetch()
 {
     while (keypressBuffered())
@@ -271,7 +243,7 @@ void flushGetch()
 }
 
 // TODO: Make it return enum element
-char waitKey()
+unsigned char waitKey()
 {
     unsigned char c = popKeypress();
     if (c==224)
