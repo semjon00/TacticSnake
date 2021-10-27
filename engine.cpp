@@ -5,10 +5,10 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
+#include <ctime>
 
 #ifdef _WIN32
 #include <cstdlib>
-#include <ctime>
 #include <windows.h>
 #include <conio.h>
 
@@ -129,11 +129,17 @@ void setColor(int c) {
 }
 
 void pause(int ms) {
-    sleep(ms);
+    struct timespec rem{};
+    struct timespec req= {
+            (int)(ms / 1000),
+            (ms % 1000) * 1000000
+    };
+
+    nanosleep(&req , &rem);
 }
 
 void title(const std::string& title) {
-    std::cout << "\033]0;" << title << "\007";
+    std::cout << "\033]30;" << title << "\007";
 }
 
 void cls() {
@@ -161,6 +167,7 @@ void draw(short x, short y, int color, const std::string& outing)
     gotoXY(x, y);
     setColor(color);
     std::cout << outing;
+    std::flush(std::cout);
 }
 
 void drawFrame(short x, short y, short dx, short dy, int color, char base)

@@ -3,13 +3,10 @@
 #include "engine.h"
 #include "ui.h"
 
-Snake::Snake(int _player_number, std::pair<int, int> startPos)
+Snake::Snake(short _player_number, std::pair<int, int> startPos)
 {
     player_number = _player_number;
     seed = rand();
-
-    colors[0] = snakes_colors[player_number][0];
-    colors[1] = snakes_colors[player_number][1];
 
     visited_cords.emplace_back(startPos);
     drawPart(getHeadX(), getHeadY(), HEAD);
@@ -68,7 +65,6 @@ std::pair<int, int> Snake::pickTurn()
             }
             steps--;
             playerBarUpdate(steps, player_number, false);
-            draw(1,1,((rand() % 14) + 1)*17, " ");
 
             if (steps == 0)
                 break;
@@ -76,7 +72,6 @@ std::pair<int, int> Snake::pickTurn()
                 c = waitKey();
         };
 
-        // draw(1,1,(player_number+3)*17, "X");
         return std::make_pair(deltaX, deltaY);
     }
 }
@@ -90,14 +85,14 @@ void Snake::makeMove(int x, int y) {
 
 void Snake::drawPart(short x, short y, int part)
 {
-    int color = colors[0];
+    int color = snakes_colors[player_number][0];
 
     if (part == EMPTY)
         color = 0;
     else if (part==REGULAR && !UI::settings.strict_color_mode)
     {
         if (hash(seed*10000 + x * 100 + y)%3 == 0)
-            color = colors[1];
+            color = snakes_colors[player_number][1];
     }
 
     for(short i=0; i<3; i++)

@@ -4,7 +4,7 @@
 namespace Version{
 	static const long MAJOR  = 0;
 	static const long MINOR  = 2;
-	static const long BUILD  = 410;
+	static const long BUILD  = 411;
 
     static std::string getVersion() {
         return

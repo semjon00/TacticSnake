@@ -13,7 +13,7 @@ enum Part
 class Snake
 {
 public:
-    Snake(int _player_number, std::pair<int, int> startPos);
+    Snake(short _player_number, std::pair<int, int> startPos);
 
     short getHeadX();
     short getHeadY();
@@ -27,13 +27,10 @@ public:
     bool isDead = false;
     std::vector<std::pair<short,short>> visited_cords;
     int seed;
-    int colors[2];
 
     // Long jump and diagonal
     bool bonus_avaible[2] = {true, true};
     short player_number;
-
-
 
 protected:
     const char* debris[8][3] = {

@@ -88,27 +88,25 @@ std::pair<int,int> Game::getRealCoords(int x, int y)
 
 bool Game::movesAvailable(Snake &snake)
 {
-    bool avaible = false;
-
     for (short k1=-1; k1<2; k1+=2)
     {
         for (short k2=0; k2<2; ++k2)
         {
             // Checking adjacent-cell moves
             if (getBoardAt(snake.getHeadX() + (k2 ? 0 : k1), snake.getHeadY() + (k2 ? k1 : 0)) == -1)
-                avaible = true;
+                return true;
 
             // Checking jumps
             if (snake.bonus_avaible[0] && (getBoardAt(snake.getHeadX() + (k2 ? 0 : k1 * 2),
                                                       snake.getHeadY() + (k2 ? k1 * 2 : 0)) == -1))
-                avaible = true;
+                return true;
 
             // Checking "knight" moves
             if (snake.bonus_avaible[0] && snake.bonus_avaible[1])
             {
                 if (getBoardAt(snake.getHeadX() + k1, snake.getHeadY() + k2 * 4 - 2) == -1 || \
                     getBoardAt(snake.getHeadX() + k2 * 4 - 2, snake.getHeadY() + k1) == -1 )
-                    avaible = true;
+                    return true;
             }
         }
 
@@ -118,11 +116,11 @@ bool Game::movesAvailable(Snake &snake)
             for (short k2=-1; k2<2; k2+=2)
             {
                 if (getBoardAt(snake.getHeadX() + k1, snake.getHeadY() + k2) == -1)
-                    avaible = true;
+                    return true;
             }
         }
     }
-    return avaible;
+    return false;
 }
 
 // Attempt to turn the snake, given relative coords
