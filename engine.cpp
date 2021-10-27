@@ -7,6 +7,8 @@
 #include <string>
 
 #ifdef _WIN32
+#include <cstdlib>
+#include <ctime>
 #include <windows.h>
 #include <conio.h>
 
