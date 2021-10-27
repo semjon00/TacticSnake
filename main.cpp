@@ -28,8 +28,8 @@ int main()
             // Exiting game
             draw(10,18,RED*16+GREEN,"GOODBYE!");
             pause(1000);
-            setColor(BLACK);
-            gotoXY(15,18);
+            cls();
+            gotoXY(1,1);
             break;
         }
     }
