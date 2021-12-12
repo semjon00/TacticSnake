@@ -230,6 +230,7 @@ short choosing(std::vector<short> Y, short x, int color, const std::string& base
             pointing_to=(pointing_to+1)%Y.size();
             break;
         case 'd':
+        case 'q':
             return pointing_to;
             break;
         }
