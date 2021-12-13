@@ -49,6 +49,14 @@ void UI::settingsScreen(GameSettings &changing)
     int picked = 0;
     while (!to_exit)
     {
+        // Incompatible settings overrides
+        if (changing.ai_mode)
+        {
+            changing.snakes_total = 2;
+            changing.corpseMode = false;
+            changing.portal_walls = false;
+        }
+
         // Screen
         cls();
 
@@ -61,10 +69,13 @@ void UI::settingsScreen(GameSettings &changing)
         draw(7, 15, GRAY, "Portal walls ");
         draw(20, 15, GREEN, changing.portal_walls ? "[--I]" : "[O--]");
 
+        draw(7, 17, GRAY, "AI mode ");
+        draw(20, 17, GREEN, changing.ai_mode ? "[--I]" : "[O--]");
+
         draw(7, 23, GRAY, "Back");
 
         // Choose
-        picked = choosing({11, 13, 15, 23}, 4, YELLOW, ">", picked);
+        picked = choosing({11, 13, 15, 17, 23}, 4, YELLOW, ">", picked);
         switch (picked)
         {
         case 0:
@@ -77,6 +88,9 @@ void UI::settingsScreen(GameSettings &changing)
             changing.portal_walls = !changing.portal_walls;
             break;
         case 3:
+            changing.ai_mode = !changing.ai_mode;
+            break;
+        case 4:
             to_exit = true;
             break;
         }

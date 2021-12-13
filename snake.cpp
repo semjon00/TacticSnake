@@ -9,7 +9,7 @@ Snake::Snake(short _player_number, std::pair<int, int> startPos)
     seed = rand();
 
     visited_cords.emplace_back(startPos);
-    drawPart(getHeadX(), getHeadY(), HEAD);
+    drawPart(getHeadX(), getHeadY(), getMyHeadIndex());
 }
 
 short Snake::getHeadX()
@@ -19,6 +19,10 @@ short Snake::getHeadX()
 short Snake::getHeadY()
 {
     return visited_cords.back().second;
+}
+int Snake::getMyHeadIndex()
+{
+    return HEAD;
 }
 
 // Asks the snake to pick relative coords to turn to
@@ -80,7 +84,7 @@ std::pair<int, int> Snake::pickTurn()
 void Snake::makeMove(int x, int y) {
     drawPart(getHeadX(), getHeadY(), REGULAR);
     visited_cords.emplace_back(x, y);
-    drawPart(getHeadX(), getHeadY(), HEAD);
+    drawPart(getHeadX(), getHeadY(), getMyHeadIndex());
 }
 
 void Snake::drawPart(short x, short y, int part)
