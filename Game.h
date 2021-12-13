@@ -10,8 +10,6 @@ class Game {
 
     int snakes_alive;
     int isGameOn = true;
-
-    constexpr static std::pair<int,int> spawn_coords[4] = {{0, 0}, {7, 6}, {0, 6}, {7, 0}}; // Snake start coordinates
 public:
 
     GameSettings settings;

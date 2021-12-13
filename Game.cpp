@@ -12,6 +12,12 @@ Game::Game(const GameSettings& _settings) {
     // Init
     board = std::vector<std::vector<int>> (settings.field_width, std::vector<int> (settings.field_height, -1));
     std::vector<Snake> snakes;
+    static std::pair<int,int> spawn_coords[4] = {
+            {0, 0},
+            {_settings.field_width - 1, _settings.field_height - 1},
+            {0, _settings.field_height - 1},
+            {_settings.field_width - 1, 0}
+    };
     for(int i = 0; i<settings.snakes_total; i++)
     {
         snakes.emplace_back(i, spawn_coords[i]);
