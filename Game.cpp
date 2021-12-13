@@ -60,6 +60,9 @@ Game::Game(const GameSettings& _settings) {
             }
         }
     }
+    for (auto s : snakes) {
+        delete s;
+    }
 
     pause(2000);
 }

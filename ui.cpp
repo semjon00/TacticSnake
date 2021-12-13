@@ -38,7 +38,7 @@ int UI::mainScreen()
     draw(10,11,GRAY,"Game rules");
     draw(10,13,GRAY,"Appearance");
     draw(10,16,GRAY,"Exit");
-    draw(0, 29, Version::BUILD % 7 + 1, Version::getVersion());
+    draw(0, 29, Version::getVersionColor(), Version::getVersion());
 
     return choosing({10, 11, 13, 16}, 8, YELLOW, ">");
 }
