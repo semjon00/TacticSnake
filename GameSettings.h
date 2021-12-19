@@ -10,7 +10,6 @@ public:
     int snakes_total;
     bool corpseMode;
     bool portal_walls;
-    bool ai_mode;
 };
 
 

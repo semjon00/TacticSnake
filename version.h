@@ -2,10 +2,10 @@
 #define VERSION_H
 
 namespace Version{
-	static const long MAJOR  = 0;
-	static const long MINOR  = 3;
-	static const long BUILD  = 0;
-	static const std::string postfix = "-dev0";
+    static const long MAJOR  = 0;
+    static const long MINOR  = 2;
+    static const long BUILD  = 412;
+	static const std::string postfix = "";
 
     static std::string getVersion() {
         return

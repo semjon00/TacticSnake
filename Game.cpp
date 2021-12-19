@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "engine.h"
 #include "snake.h"
-#include "ai_snake.h"
 
 Game::Game(const GameSettings& _settings) {
     settings = _settings;
@@ -22,12 +21,7 @@ Game::Game(const GameSettings& _settings) {
     };
     for(int i = 0; i<settings.snakes_total; i++)
     {
-        if (settings.ai_mode && i == 1) {
-            snakes.push_back(new AISnake(i, spawn_coords[i], this));
-        } else {
-            snakes.push_back(new Snake(i, spawn_coords[i]));
-        }
-
+        snakes.push_back(new Snake(i, spawn_coords[i]));
         board[spawn_coords[i].first][spawn_coords[i].second] = i;
     }
     snakes_alive = settings.snakes_total;
