@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "engine.h"
+#include "snake.h"
 
 Game::Game(const GameSettings& _settings) {
     settings = _settings;
@@ -11,7 +12,7 @@ Game::Game(const GameSettings& _settings) {
 
     // Init
     board = std::vector<std::vector<int>> (settings.field_width, std::vector<int> (settings.field_height, -1));
-    std::vector<Snake> snakes;
+    std::vector<Snake*> snakes;
     static std::pair<int,int> spawn_coords[4] = {
             {0, 0},
             {_settings.field_width - 1, _settings.field_height - 1},
@@ -20,7 +21,7 @@ Game::Game(const GameSettings& _settings) {
     };
     for(int i = 0; i<settings.snakes_total; i++)
     {
-        snakes.emplace_back(i, spawn_coords[i]);
+        snakes.push_back(new Snake(i, spawn_coords[i]));
         board[spawn_coords[i].first][spawn_coords[i].second] = i;
     }
     snakes_alive = settings.snakes_total;
@@ -31,27 +32,30 @@ Game::Game(const GameSettings& _settings) {
         for(auto & snake : snakes)
         {
             // Main loop
-            if (snake.isDead)
+            if (snake->isDead)
                 continue;
 
             if (snakes_alive<=1)
             {
-                snake.win();
+                snake->win();
                 isGameOn = false;
                 break;
             }
-            if (movesAvailable(snake)) {
+            if (movesAvailable(*snake)) {
                 std::pair<int,int> got;
                 do {
-                    got = snake.pickTurn();
-                } while(!turn(got.first, got.second, snake));
+                    got = snake->pickTurn();
+                } while(!turn(got.first, got.second, *snake));
             } else {
-                snake.lose(settings.corpseMode);
+                snake->lose(settings.corpseMode);
                 if (!settings.corpseMode)
-                    removeCorpse(snake);
+                    removeCorpse(*snake);
                 snakes_alive--;
             }
         }
+    }
+    for (auto s : snakes) {
+        delete s;
     }
 
     pause(2000);

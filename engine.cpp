@@ -80,8 +80,6 @@ unsigned char popKeypress()
 }
 #endif
 #ifdef __linux__
-#include <unistd.h>
-#include <termios.h>
 
 void initInterface() {
     // Enable one-keypress reads
@@ -89,6 +87,7 @@ void initInterface() {
 
     // Set width and height
     std::cout << '\033' << "[8;50;100t";
+    system("clear");
 }
 
 void gotoXY(short x, short y) {

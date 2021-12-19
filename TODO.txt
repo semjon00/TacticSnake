@@ -1,3 +1,6 @@
+/ Working right now on
+ CPU-control-mode (AI Snake), thanks to AI UNI course
+
 / Priority
  Multiplatform engine (should render in a new window)
  Method access modifiers and methods order is a mess
@@ -15,13 +18,8 @@
 
 / Other
  Strings/language system
- Make executable smaller
  More visual way to make turns
- "My snakes are" indicator in net mode
  Settings are stored between launches
  Game skins
- Net time out
  Recording and replaying match
- CPU-control-mode
  More snake customization
- 

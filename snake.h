@@ -7,7 +7,7 @@
 
 enum Part
 {
-    EMPTY, REGULAR, HEAD, CORPSE_HEAD, WIN_HEAD
+    EMPTY, REGULAR, HEAD, CORPSE_HEAD, WIN_HEAD, WATSON_HEAD, CRY_EMOJI_HEAD, KISS_EMOJI_HEAD
 };
 
 class Snake
@@ -17,8 +17,10 @@ public:
 
     short getHeadX();
     short getHeadY();
-    std::pair<int, int> pickTurn();
+    virtual int getMyHeadIndex();
+    virtual std::pair<int, int> pickTurn();
     void drawPart(short x, short y, int part);
+
     void makeMove(int x, int y);
 
     void lose(bool corpseMode);
@@ -38,8 +40,8 @@ protected:
             {"   ", "   ", "   "}, // Regular
             {"* *", "   ", "___"}, // Head
             {"x x", "   ", "___"}, // Corpse head
-            {"o^o", "   ", "__j"}, // Watson head
             {"^ ^", "   ", "c_j"}, // Win head
+            {"o^o", "   ", "__j"}, // Watson head
             {"T T", "   ", " _ "}, // Cry emoji head
             {"o -", "   ", " -<"}, // Kiss emoji head
     };
