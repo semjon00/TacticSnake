@@ -259,29 +259,12 @@ unsigned char waitKey()
     if (c==224)
         c = popKeypress();
 
-    // Arrow keys
-    if (c==72)
-        c = 119; // up
-    if (c==75)
-        c =  97; // left
-    if (c==80)
-        c = 115; // down
-    if (c==77)
-        c = 100; // right
-    if (c==39)
-        c = 'q'; // action
-
-    // Cyrilic
-    if (c==230)
-        c = 119; // key-up
-    if (c==228)
-        c =  97; // key-left
-    if (c==235)
-        c = 115; // key-down
-    if (c==162)
-        c = 100; // key-right
-    if (c == 92)
-        c = 'q'; // action
+    // Arrow keys and cyrillic conversion
+    if (c==72 || c==230) c = 'w'; // up
+    if (c==75 || c==228) c = 'a'; // left
+    if (c==80 || c==235) c = 's'; // down
+    if (c==77 || c==162) c = 'd'; // right
+    if (c==39 || c==92 || c==169) c = 'q'; // action
 
     return c;
 }
