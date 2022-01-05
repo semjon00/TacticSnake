@@ -255,6 +255,10 @@ void flushGetch()
 // TODO: Make it return enum element
 unsigned char waitKey()
 {
+    // If you want to remove this flushGetch call,
+    // test if right-clicking sometimes makes the function return a dangling character from the buffer!
+    flushGetch();
+
     unsigned char c = popKeypress();
     if (c==224)
         c = popKeypress();
