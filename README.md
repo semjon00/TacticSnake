@@ -1,5 +1,5 @@
 # TacticSnake
-Simple game with unique rules. My pet project that started way back in 2018.
+Simple game with unique rules. My pet project that started way back in 2017.
 
 **Build**: Create a folder named `cmake-build` and run `cmake ..` from it.
 
