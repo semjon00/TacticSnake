@@ -1,7 +1,6 @@
-/ Working right now on
- CPU-control-mode (AI Snake), thanks to AI UNI course
 
 / Priority
+ CPU-control-mode (AI Snake), thanks to AI UNI course
  Multiplatform engine (should render in a new window)
  Method access modifiers and methods order is a mess
  Naming is also a mess
@@ -23,3 +22,76 @@
  Game skins
  Recording and replaying match
  More snake customization
+
+=
+==
+===
+====
+===
+==
+=
+Ideas for reimplementation and further improvements:
+=== BASE STRUCTURE ===
+- GUI
+- Engine that gathers and sends events
+- Working as a player
+- Networking - events should travel
+
+
+=== MORE STRUCTURE ===
+!!! There is an engine with states:
+-> engine object getting spawed with a settings object
+-> waiting for everybody to join
+-> waiting for some player to spawn an event
+-> processing an event
+-> game had ended, send the last events and destroy the game
+-> network "engine" = link to a server
+-> local "engine" = actual engine as an object
+
+!!! Networking:
+-> KISS (no game-related logic)
+-> jsons in the TLS tube
+-> keyed access to engines
+
+!!! GUI:
+-> allows creating an engine object locally or on a server
+-> allows to formulate a settings object
+-> set up local UI settings
+-> allows creating events for engine (one GUI = one engine)
+
+
+=== OBJECTS (unfinished) ===
+Settings
+/ game field size
+/ corpse mode
+/ tail shorten
+/ portal walls
+/ snake count
+
+BaseEngine [singleton]
+/ snakes
+/ field
+/ settings
+' cause (returns effects)
+
+RemoteEngine impl. BaseEngine
+' constructor(settings, ip)
+/ event-sinks
+' event-hole (async)
+
+LocalEngine impl. BaseEngine
+' constructor(settings)
+/ server connection
+
+...
+
+=== STACK POSSIBILITIES ===
+Flask, Nutika <> no web
+Flask, JavaScript <> major engine overhead
+Flask, C++ <> C++ sockets, no GUI upgrade
+Node.js, JavaScript + HTML5 <> tons of JS, no native
+
+=== Client/Server ===
+Minimal dumb client
+Jointed client+server
+Full client, full server
