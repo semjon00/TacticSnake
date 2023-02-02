@@ -1,5 +1,5 @@
 # TacticSnake
-Simple game with unique rules. My pet project that started way back in 2017.
+Simple game with unique rules. My pet project that started way back in 2017. This is the "classic", early C++ implementation of the game.
 
 **Build**: Create a folder named `cmake-build` and run `cmake ..` from it.
 
@@ -7,7 +7,7 @@ Simple game with unique rules. My pet project that started way back in 2017.
 
 **Controls**: WASD and Q. Enter into menus with D.
 
-**How to play the game:**
+**How to play this version of the game:**
 The game is turn-based, each player takes a turn in their respective order. The player who is unable to make a turn loses. The last standing player wins.
 
 A turn is one of the following:
